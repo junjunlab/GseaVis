@@ -34,4 +34,4 @@ gseaNb(object = gseaRes,
 
 ## More examples refer to
 
->
+> **https://github.com/junjunlab/GseaVis/wiki**
