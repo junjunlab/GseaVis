@@ -17,7 +17,7 @@ You can install the development version of GseaVis from [GitHub](https://github.
 devtools::install_github("junjunlab/GseaVis")
 ```
 
-## more examples refer to
+## Examples
 
 This is a basic example:
 
@@ -32,6 +32,6 @@ gseaNb(object = gseaRes,
 
 ![image](https://user-images.githubusercontent.com/64965509/177512952-7043555d-7f06-427c-b969-8427c0a065f5.png)
 
-**more examples refer to:**
+## ore examples refer to
 
 >
