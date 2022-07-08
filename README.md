@@ -4,9 +4,9 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of GseaVis is to visualize GSEA enrichment results as a implement package for **enrichplot** _gseaplot2_ function. And some codes origin from **enrichplot** package, thanks for **Guangchuang Yu** professor's contribution!
+The goal of GseaVis is to visualize GSEA enrichment results as an implement package for **enrichplot** _gseaplot2_ function. And some codes origin from **enrichplot** package, thanks for **Guangchuang Yu** professor's contribution!
 
-You can mark your gene name on GSEA plot and this package also support more avaliable parametrs to customize your own plot.
+You can mark your gene name on GSEA plot and this package also support more avaliable parameters to customize your own plot.
 
 ## Installation
 
