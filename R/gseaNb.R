@@ -138,11 +138,18 @@ gseaNb <- function(object = NULL,
 
   ################################################
   # nice title
-  tit <- unlist(strsplit(geneSetID, split = "_"))
-  niceTit <-
-    paste(stringr::str_to_title(tit[2:length(tit)]), collapse = " ") %>%
-    stringr::str_wrap(., width = termWidth)
+  tit <- unlist(strsplit(data_ga$Description, split = "_"))
+  if(length(tit) == 1){
+    niceTit <-
+      paste(stringr::str_to_title(tit[1:length(tit)]), collapse = " ") %>%
+      stringr::str_wrap(., width = termWidth)
+  }else{
+    niceTit <-
+      paste(stringr::str_to_title(tit[2:length(tit)]), collapse = " ") %>%
+      stringr::str_wrap(., width = termWidth)
+  }
 
+  ################################################
   # plot
   pcurve <- ggplot2::ggplot(
     gsdata,
@@ -422,7 +429,7 @@ gseaNb <- function(object = NULL,
 
   # col <- c(rev(brewer.pal(5, "Blues")), brewer.pal(5, "Reds"))
   # new color
-  color <- rev(grDevices::colorRampPalette(c(htCol[1], "white", htCol[2]))(10))
+  color <- grDevices::colorRampPalette(c(htCol[1], "white", htCol[2]))(10)
 
   ymin <- 0
   yy <- htHeight
@@ -442,7 +449,7 @@ gseaNb <- function(object = NULL,
       xmax = ~xmax,
       ymin = ~ymin,
       ymax = ~ymax,
-      fill = ~ I(color)
+      fill = ~ I(col)
     ),
     data = d,
     alpha = 0.8,
