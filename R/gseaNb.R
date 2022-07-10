@@ -509,7 +509,8 @@ gseaNb <- function(object = NULL,
 
   ###########################################
   # new color
-  htcolor <- rev(grDevices::colorRampPalette(newHtCol)(10))
+  htcolor <- grDevices::colorRampPalette(newHtCol)(10)
+  d <- d %>% dplyr::mutate(htcol = htcolor[unique(inv)])
 
   ht <- ggplot2::ggplot(gsdata, aes_(x = ~x, y = ~runningScore)) +
     ggplot2::geom_rect(
@@ -518,7 +519,7 @@ gseaNb <- function(object = NULL,
         xmax = ~xmax,
         ymin = ~ymin,
         ymax = ~ymax,
-        fill = ~ I(htcolor)
+        fill = ~ I(htcol)
       ),
       data = d,
       alpha = 0.8,
