@@ -133,7 +133,7 @@ gseaNb <- function(object = NULL,
     dplyr::filter(position == 1)
 
   # to dataframe
-  data_ga <- data.frame(gseaRes) %>%
+  data_ga <- data.frame(object) %>%
     dplyr::filter(ID == geneSetID)
 
   ################################################
