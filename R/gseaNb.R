@@ -253,7 +253,7 @@ gseaNb <- function(object = NULL,
     # add gene name
     geneLabel <- gsdata1 %>% dplyr::filter(gene_name %in% addGene)
 
-    if (is.null(geneLabel)) {
+    if (dim(geneLabel)[1] == 0) {
       print("Your gene is not in this pathway! Please choose again!")
     } else {
       if (rmSegment == TRUE) {
