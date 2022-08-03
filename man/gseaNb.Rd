@@ -67,6 +67,12 @@
 \item{pCol}{pvalue label color, defalut is "grey30".}
 
 \item{pHjust}{pvalue label hjust, defalut is 1.}
+
+\item{rmPrefix}{whether remove GO term prefix like "GOBP/KEGG/CC/MF_*", defalut is TRUE.}
+
+\item{nesDigit}{the NES score digits retained, defalut is 2.}
+
+\item{pDigit}{the pvalue and pajust value digits retained, defalut is 2.}
 }
 \value{
 ggplot2 object

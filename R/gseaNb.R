@@ -32,6 +32,11 @@
 #' @param pvalSize set pvalue label text size, defalut is 4.
 #' @param pCol pvalue label color, defalut is "grey30".
 #' @param pHjust pvalue label hjust, defalut is 1.
+#'
+#' @param rmPrefix whether remove GO term prefix like "GOBP/KEGG/CC/MF_*", defalut is TRUE.
+#' @param nesDigit the NES score digits retained, defalut is 2.
+#' @param pDigit the pvalue and pajust value digits retained, defalut is 2.
+#'
 #' @importFrom ggplot2 aes_
 #' @return ggplot2 object
 #' @export
@@ -121,7 +126,10 @@ gseaNb <- function(object = NULL,
                    pvalY = 0.9,
                    pvalSize = 4,
                    pCol = "grey30",
-                   pHjust = 1) {
+                   pHjust = 1,
+                   rmPrefix = TRUE,
+                   nesDigit = 2,
+                   pDigit = 2) {
   # get dat
   gsdata <- gsInfo(object,
     geneSetID = geneSetID
@@ -144,9 +152,15 @@ gseaNb <- function(object = NULL,
       paste(stringr::str_to_title(tit[1:length(tit)]), collapse = " ") %>%
       stringr::str_wrap(., width = termWidth)
   }else{
-    niceTit <-
-      paste(stringr::str_to_title(tit[2:length(tit)]), collapse = " ") %>%
-      stringr::str_wrap(., width = termWidth)
+    if(rmPrefix == TRUE){
+      niceTit <-
+        paste(stringr::str_to_title(tit[2:length(tit)]), collapse = " ") %>%
+        stringr::str_wrap(., width = termWidth)
+    }else{
+      niceTit <-
+        paste(stringr::str_to_title(tit[1:length(tit)]), collapse = " ") %>%
+        stringr::str_wrap(., width = termWidth)
+    }
   }
 
   ################################################
@@ -349,13 +363,13 @@ gseaNb <- function(object = NULL,
   if (addPval == TRUE) {
     pLabel <- paste0(
       "NES: ",
-      round(data_ga$NES, digits = 2),
+      round(data_ga$NES, digits = nesDigit),
       "\n",
       "Pvalue: ",
-      round(data_ga$pvalue, digits = 2),
+      round(data_ga$pvalue, digits = pDigit),
       "\n",
       "Ajusted Pvalue: ",
-      round(data_ga$p.adjust, digits = 2),
+      round(data_ga$p.adjust, digits = pDigit),
       "\n",
       sep = " "
     )
