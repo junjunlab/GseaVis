@@ -36,6 +36,8 @@
 #' @param rmPrefix whether remove GO term prefix like "GOBP/KEGG/CC/MF_*", defalut is TRUE.
 #' @param nesDigit the NES score digits retained, defalut is 2.
 #' @param pDigit the pvalue and pajust value digits retained, defalut is 2.
+#' @param markTopgene whether add top n genes on plot, defalut is FALSE.
+#' @param topGeneN the number of genes to be marked on plot, defalut is 5.
 #'
 #' @importFrom ggplot2 aes_
 #' @return ggplot2 object
@@ -92,7 +94,7 @@
 #'       rmSegment = TRUE)
 
 globalVariables(c(
-  ".", "ID", "aes_", "gene_name","gseaRes", "position"))
+  ".", "ID", "aes_", "gene_name","gseaRes", "position","x"))
 
 # define function
 gseaNb <- function(object = NULL,
@@ -129,7 +131,9 @@ gseaNb <- function(object = NULL,
                    pHjust = 1,
                    rmPrefix = TRUE,
                    nesDigit = 2,
-                   pDigit = 2) {
+                   pDigit = 2,
+                   markTopgene = FALSE,
+                   topGeneN = 5) {
   # get dat
   gsdata <- gsInfo(object,
     geneSetID = geneSetID
@@ -264,9 +268,16 @@ gseaNb <- function(object = NULL,
   if (is.null(addGene)) {
     plabel <- pcurveRes
   } else {
-    # add gene name
-    geneLabel <- gsdata1 %>% dplyr::filter(gene_name %in% addGene)
+    # whether mark top genes
+    if(markTopgene == TRUE){
+      # add gene name
+      geneLabel <- gsdata1 %>% dplyr::arrange(x) %>% dplyr::slice_head(n = topGeneN)
+    }else{
+      # add gene name
+      geneLabel <- gsdata1 %>% dplyr::filter(gene_name %in% addGene)
+    }
 
+    # add gene on plot
     if (nrow(geneLabel) == 0) {
       print("Your gene is not in this pathway! Please choose again!")
     } else {

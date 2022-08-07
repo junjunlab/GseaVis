@@ -73,6 +73,10 @@
 \item{nesDigit}{the NES score digits retained, defalut is 2.}
 
 \item{pDigit}{the pvalue and pajust value digits retained, defalut is 2.}
+
+\item{markTopgene}{whether add top n genes on plot, defalut is FALSE.}
+
+\item{topGeneN}{the number of genes to be marked on plot, defalut is 5.}
 }
 \value{
 ggplot2 object
