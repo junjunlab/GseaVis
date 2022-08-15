@@ -77,6 +77,8 @@
 \item{markTopgene}{whether add top n genes on plot, defalut is FALSE.}
 
 \item{topGeneN}{the number of genes to be marked on plot, defalut is 5.}
+
+\item{kegg}{whether input is gseKEGG object, defalut is FALSE.}
 }
 \value{
 ggplot2 object

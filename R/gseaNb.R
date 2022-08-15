@@ -38,6 +38,7 @@
 #' @param pDigit the pvalue and pajust value digits retained, defalut is 2.
 #' @param markTopgene whether add top n genes on plot, defalut is FALSE.
 #' @param topGeneN the number of genes to be marked on plot, defalut is 5.
+#' @param kegg whether input is gseKEGG object, defalut is FALSE.
 #'
 #' @importFrom ggplot2 aes_
 #' @return ggplot2 object
