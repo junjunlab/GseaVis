@@ -133,16 +133,26 @@ gseaNb <- function(object = NULL,
                    nesDigit = 2,
                    pDigit = 2,
                    markTopgene = FALSE,
-                   topGeneN = 5) {
+                   topGeneN = 5,
+                   kegg = FALSE) {
   # get dat
   gsdata <- gsInfo(object,
     geneSetID = geneSetID
   )
 
-  # filter in pathway gene
-  gsdata1 <- gsdata %>%
-    dplyr::mutate("gene_name" = names(object@geneList)) %>%
-    dplyr::filter(position == 1)
+  if(kegg == FALSE){
+    # filter in pathway gene
+    gsdata1 <- gsdata %>%
+      dplyr::mutate("gene_name" = names(object@geneList)) %>%
+      dplyr::filter(position == 1)
+  }else{
+    # filter in pathway gene
+    gene2Symbol <- object@gene2Symbol %>% data.frame()
+
+    gsdata1 <- gsdata %>%
+      dplyr::mutate("gene_name" = gene2Symbol$.) %>%
+      dplyr::filter(position == 1)
+  }
 
   # to dataframe
   data_ga <- data.frame(object) %>%
