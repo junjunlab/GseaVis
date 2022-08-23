@@ -17,6 +17,10 @@ You can install the development version of GseaVis from [GitHub](https://github.
 devtools::install_github("junjunlab/GseaVis")
 ```
 
+## Citation
+
+> Jun Z (2022). *GseaVis: An Implement R Package to Visualize GSEA Results.*  https://github.com/junjunlab/GseaVis, https://github.com/junjunlab/GseaVis/wiki
+
 ## Examples
 
 This is a basic example:
