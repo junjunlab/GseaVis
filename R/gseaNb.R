@@ -41,6 +41,8 @@
 #' @param kegg whether input is gseKEGG object, defalut is FALSE.
 #'
 #' @importFrom ggplot2 aes_
+#' @import DOSE
+#' @import RColorBrewer
 #' @return ggplot2 object
 #' @export
 #'
@@ -388,10 +390,12 @@ gseaNb <- function(object = NULL,
       round(data_ga$NES, digits = nesDigit),
       "\n",
       "Pvalue: ",
-      round(data_ga$pvalue, digits = pDigit),
+      # round(data_ga$pvalue, digits = pDigit),
+      ifelse(data_ga$pvalue < 0.001,"< 0.001",round(data_ga$pvalue, digits = pDigit)),
       "\n",
       "Ajusted Pvalue: ",
-      round(data_ga$p.adjust, digits = pDigit),
+      # round(data_ga$p.adjust, digits = pDigit),
+      ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)),
       "\n",
       sep = " "
     )

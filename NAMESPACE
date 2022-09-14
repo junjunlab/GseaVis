@@ -3,5 +3,7 @@
 export("%>%")
 export(gsInfo)
 export(gseaNb)
+import(DOSE)
+import(RColorBrewer)
 importFrom(ggplot2,aes_)
 importFrom(magrittr,"%>%")
