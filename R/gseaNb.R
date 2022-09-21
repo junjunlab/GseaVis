@@ -47,57 +47,16 @@
 #' @export
 #'
 #' @examples
-#'# load data
+#'\donttest{# load data
 #'test_data <- system.file("extdata", "gseaRes.RDS", package = "GseaVis")
 #'gseaRes <- readRDS(test_data)
 #'
 #'# all plot
 #'gseaNb(object = gseaRes,
 #'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS')
-#'
-#'# retain curve
-#'gseaNb(object = gseaRes,
-#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
-#'       subPlot = 1)
-#'
-#'# retain curve and heatmap
-#'gseaNb(object = gseaRes,
-#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
-#'       subPlot = 2)
-#'
-#'# wrap the term title
-#'gseaNb(object = gseaRes,
-#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
-#'       subPlot = 2,
-#'       termWidth = 30)
-#'
-#'# add gene in specific pathway
-#'mygene <- c("Entpd8","Htr2a","Nt5e","Actn3","Entpd1",
-#'            "Pfkp", "Tpi1","Igf1","Ddit4","Ak9")
-#'
-#'# plot
-#'gseaNb(object = gseaRes,
-#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
-#'       subPlot = 2,
-#'       addGene = mygene)
-#'
-#'# change gene color and arrow type
-#'gseaNb(object = gseaRes,
-#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
-#'       subPlot = 2,
-#'       addGene = mygene,
-#'       arrowType = 'open',
-#'       geneCol = 'black')
-#'
-#'# all plot
-#'gseaNb(object = gseaRes,
-#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
-#'       subPlot = 3,
-#'       addGene = mygene,
-#'       rmSegment = TRUE)
+#'}
 
-globalVariables(c(
-  ".", "ID", "aes_", "gene_name","gseaRes", "position","x"))
+globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes", "position","x"))
 
 # define function
 gseaNb <- function(object = NULL,
@@ -192,7 +151,7 @@ gseaNb <- function(object = NULL,
       color = "black",
       lty = "dashed"
     ) +
-    ggplot2::geom_line() +
+    ggplot2::geom_line(size = lineSize) +
     # geom_segment(data = gsdata1,aes(xend = x,yend = 0)) +
     ggplot2::theme_bw(base_size = 14) +
     ggplot2::scale_color_gradient(low = curveCol[1], high = curveCol[2]) +
@@ -231,7 +190,7 @@ gseaNb <- function(object = NULL,
       color = "black",
       lty = "dashed"
     ) +
-    ggplot2::geom_line() +
+    ggplot2::geom_line(size = lineSize) +
     ggplot2::geom_segment(data = gsdata1, ggplot2::aes_(xend = ~x, yend = 0)) +
     ggplot2::theme_bw(base_size = 14) +
     # scale_color_gradient(low = '#336699',high = '#993399') +
