@@ -1,5 +1,5 @@
-#' @title gseaNb
-#' @name gseaNb
+#' @title dotplotGsea
+#' @name dotplotGsea
 #' @author Jun Zhang
 #' @param data GSEA enrich object from clusterProfiler, defalut is NULL.
 #' @param pval pvalue cutoff to select significant terms, defalut is NULL.
@@ -16,7 +16,6 @@
 #'
 #' @return a ggplot object.
 #' @export
-#'
 #' @examples
 #' \dontrun{dotplotGsea(data = ego3,topn = 10)}
 
