@@ -18,6 +18,7 @@ Imports:
     dplyr,
     ggplot2,
     ggrepel,
+    ggsci,
     grDevices,
     magrittr,
     RColorBrewer,

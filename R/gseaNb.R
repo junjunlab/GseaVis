@@ -1,5 +1,6 @@
 #' @title gseaNb
 #' @name gseaNb
+#' @author Jun Zhang
 #' @param object GSEA enrich results.
 #' @param subPlot which plot to show, 1/2/3, default is 3.
 #' @param lineSize curve line size. default is 0.8.
