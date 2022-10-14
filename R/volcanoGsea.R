@@ -53,7 +53,7 @@ volcanoGsea <- function(data = NULL,
       dplyr::slice_head(n = topN)
 
     # add nudge_y
-    if(x == 'sig-activated'){
+    if(x == 'sig-Activated'){
       tmp$nudgey <- nudge.y[1]
     }else{
       tmp$nudgey <- nudge.y[2]
@@ -78,6 +78,7 @@ volcanoGsea <- function(data = NULL,
                    legend.position = 'top') +
     ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 5))) +
     ggplot2::ylab('Normalized enriched score') +
+    ggplot2::xlab(paste("-log10",pcol,sep = ' ')) +
     ggrepel::geom_text_repel(data = topterm,
                              ggplot2::aes_string(x = "logp",y = "NES",label = "Description"),
                              fontface = 'italic',
