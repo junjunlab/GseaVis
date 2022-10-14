@@ -21,6 +21,7 @@ Imports:
     ggsci,
     grDevices,
     magrittr,
+    purrr,
     RColorBrewer,
     stringr,
     utils
