@@ -1,6 +1,6 @@
 Package: GseaVis
 Title: Implement for 'GSEA' Enrichment Visualization
-Version: 0.0.2
+Version: 0.0.3
 Maintainer: Jun Zhang <3219030654@stu.cpu.edu.cn>
 Authors@R: 
     person("Jun", "Zhang", , "3219030654@stu.cpu.edu.cn", role = c("aut", "cre"),
@@ -17,6 +17,7 @@ Imports:
     DOSE,
     dplyr,
     ggplot2,
+    ggpp,
     ggrepel,
     ggsci,
     grDevices,
@@ -24,6 +25,7 @@ Imports:
     purrr,
     RColorBrewer,
     stringr,
+    tibble,
     utils
 URL: https://github.com/junjunlab/GseaVis
 BugReports: https://github.com/junjunlab/GseaVis/issues

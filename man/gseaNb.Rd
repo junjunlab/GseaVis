@@ -30,7 +30,7 @@
 
 \item{arrowType}{arrow type, defalut is "closed".}
 
-\item{curveCol}{curve color, defalut is c("#76BA99", "#EB4747").}
+\item{curveCol}{curve color, defalut is c("#76BA99", "#EB4747", "#996699").}
 
 \item{htCol}{heatmap color, defalut is c("#08519C", "#A50F15").}
 
@@ -79,6 +79,8 @@
 \item{topGeneN}{the number of genes to be marked on plot, defalut is 5.}
 
 \item{kegg}{whether input is gseKEGG object, defalut is FALSE.}
+
+\item{legend.position}{the legend position, defalut is "right".}
 }
 \value{
 ggplot2 object
