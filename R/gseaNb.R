@@ -597,21 +597,38 @@ gseaNb <- function(object = NULL,
       # return(pres)
     } else if (subPlot == 2) {
       # combine
-      pres <- aplot::plot_list(
-        gglist = list(pLabelOut, pseg_ht),
-        ncol = 1,
-        heights = c(0.8, 0.2)
-      )
+      if (rmHt == FALSE){
+        pres <- aplot::plot_list(
+          gglist = list(pLabelOut, pseg_ht),
+          ncol = 1,
+          heights = c(0.8, 0.2)
+        )
+      }else{
+        pres <- aplot::plot_list(
+          gglist = list(pLabelOut, pseg),
+          ncol = 1,
+          heights = c(0.8, 0.2)
+        )
+      }
 
       # return(pres)
     } else if (subPlot == 3) {
       # combine
-      pres <-
-        aplot::plot_list(
-          gglist = list(pLabelOut, pseg_ht1, prank),
-          ncol = 1,
-          heights = c(0.5, 0.2, 0.3)
-        )
+      if (rmHt == FALSE){
+        pres <-
+          aplot::plot_list(
+            gglist = list(pLabelOut, pseg_ht1, prank),
+            ncol = 1,
+            heights = c(0.5, 0.2, 0.3)
+          )
+      }else{
+        pres <-
+          aplot::plot_list(
+            gglist = list(pLabelOut, pseg, prank),
+            ncol = 1,
+            heights = c(0.5, 0.2, 0.3)
+          )
+      }
 
       # return(pres)
     } else {
