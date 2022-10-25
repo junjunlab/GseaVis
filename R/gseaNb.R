@@ -196,6 +196,7 @@ gseaNb <- function(object = NULL,
     ggplot2::theme_bw(base_size = 14) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::theme(legend.position = legend.position,
+                   legend.box.background = ggplot2::element_blank(),
                    plot.title = ggplot2::element_text(hjust = 0.5),
                    panel.grid = ggplot2::element_blank(),
                    axis.ticks.x = ggplot2::element_blank(),
