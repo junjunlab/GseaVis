@@ -24,18 +24,7 @@ devtools::install_github("junjunlab/GseaVis")
 
 ## Examples
 
-This is a basic example:
-
-``` r
-library(GseaVis)
-## basic example code
-
-# all plot
-gseaNb(object = gseaRes,
-       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS')
-```
-
-![image](https://user-images.githubusercontent.com/64965509/177512952-7043555d-7f06-427c-b969-8427c0a065f5.png)
+![image](https://user-images.githubusercontent.com/64965509/198213474-43775942-1a40-4603-b1f8-2c2b0f2778e7.png)
 
 ## More examples refer to
 
