@@ -534,8 +534,8 @@ gseaNb <- function(object = NULL,
                                     unit = "cm"))
 
   prank <-
-  ggplot2::ggplot(gsdata[which(gsdata$Description == unique(gsdata$Description)[1]),],
-                  ggplot2::aes_(x = ~x, y = ~geneList)) +
+    ggplot2::ggplot(gsdata[which(gsdata$Description == unique(gsdata$Description)[1]),],
+                    ggplot2::aes_(x = ~x, y = ~geneList)) +
     # geom_col(width = 1,fill = 'grey80',color = NA) +
     ggplot2::geom_col(
       ggplot2::aes_(fill = ~geneList),
@@ -552,22 +552,30 @@ gseaNb <- function(object = NULL,
                         lty = "dashed") +
     ggplot2::scale_x_continuous(breaks = seq(0, nrow(gsdata), rankSeq)) +
     ggplot2::theme_bw(base_size = 14) +
-    ggplot2::theme(
-      panel.grid = ggplot2::element_blank(),
-      plot.margin = ggplot2::margin(t = -.1,
-                                    r = .2,
-                                    b = .2,
-                                    l = .2,
-                                    unit = "cm")) +
+    ggplot2::theme(panel.grid = ggplot2::element_blank(),
+                   plot.margin = ggplot2::margin(t = -.1,
+                                                 r = .2,
+                                                 b = .2,
+                                                 l = .2,
+                                                 unit = "cm")) +
     ggplot2::coord_cartesian(expand = 0) +
     ggplot2::ylab("Ranked List") +
     ggplot2::xlab("Rank in Ordered Dataset")
 
   ###########################################
   # new color
-  htcolor <- grDevices::colorRampPalette(newHtCol)(10)
-  d <- d %>% dplyr::mutate(htcol = rep(rev(htcolor),each = length(geneSetID)))
+  d <- purrr::map_df(unique(d$Description),function(x){
+    tmp <- d %>%
+      dplyr::filter(Description == x)
 
+    # add color
+    htcolor <- grDevices::colorRampPalette(newHtCol)(nrow(tmp))
+
+    tmp <- tmp %>%
+      dplyr::mutate(htcol = htcolor)
+  })
+
+  # heatmap
   ht <- ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore)) +
     ggplot2::geom_rect(ggplot2::aes_(xmin = ~xmin,
                                      xmax = ~xmax,
