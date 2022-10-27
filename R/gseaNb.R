@@ -112,7 +112,7 @@ gseaNb <- function(object = NULL,
     #   dplyr::mutate("gene_name" = names(object@geneList)) %>%
     #   dplyr::filter(position == 1)
 
-    gsdata1 <- purrr::map_df(geneSetID,function(setid){
+    gsdata1 <- purrr::map_df(unique(gsdata$Description),function(setid){
       tmp <- gsdata %>%
         dplyr::filter(Description == setid) %>%
         dplyr::mutate("gene_name" = names(object@geneList)) %>%
@@ -126,7 +126,7 @@ gseaNb <- function(object = NULL,
     #   dplyr::mutate("gene_name" = gene2Symbol$.) %>%
     #   dplyr::filter(position == 1)
 
-    gsdata1 <- purrr::map_df(geneSetID,function(setid){
+    gsdata1 <- purrr::map_df(unique(gsdata$Description),function(setid){
       tmp <- gsdata %>%
         dplyr::filter(Description == setid) %>%
         dplyr::mutate("gene_name" = gene2Symbol$.) %>%
@@ -484,7 +484,7 @@ gseaNb <- function(object = NULL,
   #                 xmax = xmax,
   #                 col = color[unique(inv)])
 
-  d <- purrr::map_df(geneSetID,function(setid){
+  d <- purrr::map_df(unique(gsdata$Description),function(setid){
     tmp <- gsdata %>%
       dplyr::filter(Description == setid)
 
@@ -534,7 +534,7 @@ gseaNb <- function(object = NULL,
                                     unit = "cm"))
 
   prank <-
-  ggplot2::ggplot(gsdata[which(gsdata$Description == geneSetID[1]),],
+  ggplot2::ggplot(gsdata[which(gsdata$Description == unique(gsdata$Description)[1]),],
                   ggplot2::aes_(x = ~x, y = ~geneList)) +
     # geom_col(width = 1,fill = 'grey80',color = NA) +
     ggplot2::geom_col(
