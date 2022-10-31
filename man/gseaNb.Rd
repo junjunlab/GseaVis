@@ -81,6 +81,28 @@
 \item{kegg}{whether input is gseKEGG object, defalut is FALSE.}
 
 \item{legend.position}{the legend position, defalut is "right".}
+
+\item{whether}{add target gene expression heatmap, defalut is FALSE.}
+
+\item{exp}{the expression matrix,tpm/fpkm/rpkm format, defalut is NULL.}
+
+\item{scale.exp}{whether scale the expression matrix, defalut is TRUE.}
+
+\item{sample.order}{the expression matrix sample orders, defalut is NULL.}
+
+\item{exp.col}{the expression colors, defalut is c('blue','white','red').}
+
+\item{ht.legend}{whether show the heatmap legend, defalut is TRUE.}
+
+\item{ght.relHight}{the relative height to the main plot, defalut is 0.4.}
+
+\item{ght.geneText.size}{the gene lable text size, defalut is 6.}
+
+\item{ght.facet}{whether facet expression heatmap, defalut is FALSE.}
+
+\item{ght.facet.scale}{the facet plot scale argumrnt, defalut is "free".}
+
+\item{termID.order}{the facet term ID orders, defalut is NULL.}
 }
 \value{
 ggplot2 object

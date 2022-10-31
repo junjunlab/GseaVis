@@ -1,6 +1,6 @@
 Package: GseaVis
 Title: Implement for 'GSEA' Enrichment Visualization
-Version: 0.0.3
+Version: 0.0.4
 Maintainer: Jun Zhang <3219030654@stu.cpu.edu.cn>
 Authors@R: 
     person("Jun", "Zhang", , "3219030654@stu.cpu.edu.cn", role = c("aut", "cre"),
@@ -24,6 +24,7 @@ Imports:
     magrittr,
     purrr,
     RColorBrewer,
+    reshape2,
     stringr,
     tibble,
     utils

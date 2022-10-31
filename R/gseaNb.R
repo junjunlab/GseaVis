@@ -42,6 +42,18 @@
 #' @param kegg whether input is gseKEGG object, defalut is FALSE.
 #' @param legend.position the legend position, defalut is "right".
 #'
+#' @param whether add target gene expression heatmap, defalut is FALSE.
+#' @param exp the expression matrix,tpm/fpkm/rpkm format, defalut is NULL.
+#' @param scale.exp whether scale the expression matrix, defalut is TRUE.
+#' @param sample.order the expression matrix sample orders, defalut is NULL.
+#' @param exp.col the expression colors, defalut is c('blue','white','red').
+#' @param ht.legend whether show the heatmap legend, defalut is TRUE.
+#' @param ght.relHight the relative height to the main plot, defalut is 0.4.
+#' @param ght.geneText.size the gene lable text size, defalut is 6.
+#' @param ght.facet whether facet expression heatmap, defalut is FALSE.
+#' @param ght.facet.scale the facet plot scale argumrnt, defalut is "free".
+#' @param termID.order the facet term ID orders, defalut is NULL.
+#'
 #' @importFrom ggplot2 aes_
 #' @import DOSE
 #' @import RColorBrewer
@@ -59,7 +71,7 @@
 #'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS')
 #'}
 
-globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes", "position","x","y"))
+globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes", "position","x","y","value","variable"))
 
 # define function
 gseaNb <- function(object = NULL,
@@ -100,10 +112,22 @@ gseaNb <- function(object = NULL,
                    markTopgene = FALSE,
                    topGeneN = 5,
                    kegg = FALSE,
-                   legend.position = "right") {
+                   legend.position = "right",
+                   add.geneExpHt = FALSE,
+                   exp = NULL,
+                   scale.exp = TRUE,
+                   sample.order = NULL,
+                   exp.col = c('blue','white','red'),
+                   ht.legend = TRUE,
+                   ght.relHight = 0.4,
+                   ght.geneText.size = 6,
+                   ght.facet = FALSE,
+                   ght.facet.scale = "free",
+                   termID.order = NULL) {
   # get dat
   gsdata <- purrr::map_df(geneSetID,function(setid){
-    gsInfo(object,geneSetID = setid)
+    gsInfo(object,geneSetID = setid) %>%
+      dplyr::mutate(id = setid)
   })
 
   if(kegg == FALSE){
@@ -137,7 +161,7 @@ gseaNb <- function(object = NULL,
   # to dataframe
   data_ga <- data.frame(object) %>%
     dplyr::filter(ID %in% geneSetID)
-  data_ga <- data_ga[unique(gsdata$Description),]
+  data_ga <- data_ga[unique(gsdata$id),]
 
   ################################################
   # nice title
@@ -216,6 +240,7 @@ gseaNb <- function(object = NULL,
   # calculate midpoint
   midpoint <- sum(range(gsdata$runningScore)) / 2
 
+  # plot
   pnew <-
     ggplot2::ggplot(gsdata,
                     ggplot2::aes_(x = ~x, y = ~runningScore, color = ~runningScore)) +
@@ -397,7 +422,7 @@ gseaNb <- function(object = NULL,
     #     pvalY * sum(abs(range(gsdata$runningScore))) + min(gsdata$runningScore)
     # }
 
-    px <- pvalX * nrow(gsdata[which(gsdata$Description == geneSetID[1]),])
+    px <- pvalX * nrow(gsdata[which(gsdata$id == geneSetID[1]),])
     py <-
       pvalY * sum(abs(range(gsdata$runningScore))) + min(gsdata$runningScore)
 
@@ -421,8 +446,8 @@ gseaNb <- function(object = NULL,
                                                             'Ajusted Pvalue' = ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)))))
 
 
-      pLabelOut <-plabel +
-        ggpp::geom_table(data = mytable, ggplot2::aes(x, y, label = table))
+      pLabelOut <- plabel +
+        ggpp::geom_table(data = mytable, ggplot2::aes(px, py, label = table))
     }
 
   } else {
@@ -434,6 +459,14 @@ gseaNb <- function(object = NULL,
     line.col <- ggplot2::scale_color_manual(values = 'black')
   }
 
+  # bottomn space
+  if(add.geneExpHt == TRUE){
+    pseg.b = 0
+  }else{
+    pseg.b = 0.2
+  }
+
+  # plot
   pseg <-
     ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore,color = ~Description)) +
     ggplot2::geom_segment(data = gsdata1,
@@ -457,7 +490,7 @@ gseaNb <- function(object = NULL,
                    panel.spacing = ggplot2::unit(0.1,'cm'),
                    plot.margin = ggplot2::margin(t = 0,
                                                  r = .2,
-                                                 b = .2,
+                                                 b = pseg.b,
                                                  l = .2,
                                                  unit = "cm")) +
     ggplot2::xlab("Rank in Ordered Dataset") +
@@ -533,6 +566,14 @@ gseaNb <- function(object = NULL,
                                     l = .2,
                                     unit = "cm"))
 
+  # bottomn space
+  if(add.geneExpHt == TRUE){
+    prank.b = 0
+  }else{
+    prank.b = 0.2
+  }
+
+  # plot
   prank <-
     ggplot2::ggplot(gsdata[which(gsdata$Description == unique(gsdata$Description)[1]),],
                     ggplot2::aes_(x = ~x, y = ~geneList)) +
@@ -555,7 +596,7 @@ gseaNb <- function(object = NULL,
     ggplot2::theme(panel.grid = ggplot2::element_blank(),
                    plot.margin = ggplot2::margin(t = -.1,
                                                  r = .2,
-                                                 b = .2,
+                                                 b = prank.b,
                                                  l = .2,
                                                  unit = "cm")) +
     ggplot2::coord_cartesian(expand = 0) +
@@ -597,6 +638,88 @@ gseaNb <- function(object = NULL,
                                                  b = .2,
                                                  l = .2,
                                                  unit = "cm"))
+
+
+  # =========================================================
+  # whether add gene expression heatmap
+  if(add.geneExpHt == TRUE){
+    # gene
+    target.g <- purrr::map_df(data_ga$ID,function(x){
+      tmp <- data_ga %>%
+        dplyr::filter(ID == x)
+      coregene <- unique(unlist(strsplit(tmp$core_enrichment,split = '\\/')))
+      output <- data.frame(gene_name = coregene,
+                           ID = x,
+                           Description = tmp$Description) %>%
+        dplyr::distinct(.,gene_name,.keep_all = TRUE)
+    })
+
+    # get gene position
+    gpos <- if(kegg == TRUE){
+      match(target.g$gene_name,object@gene2Symbol)
+    }else{
+      match(target.g$gene_name,names(object@geneList))
+    }
+
+    ginfo <- target.g %>%
+      dplyr::mutate(gpos = gpos) %>%
+      # data.frame(gpos = gpos,gene = target.g) %>%
+      dplyr::arrange(gpos)
+
+    # get expression data
+    if(scale.exp == TRUE){
+      gexp <- t(scale(t(exp[,2:ncol(exp)]),scale = TRUE,center = TRUE)) %>%
+        data.frame()
+      gexp$gene_name <- exp[,1]
+    }else{
+      gexp <- exp
+      colnames(gexp)[1] <- "gene_name"
+    }
+
+    # wide2long
+    exp.long <- gexp %>%
+      dplyr::filter(gene_name %in% unique(ginfo$gene_name)) %>%
+      dplyr::left_join(.,ginfo[,1:2],by = "gene_name") %>%
+      reshape2::melt(.,id.vars = c("gene_name","ID"))
+
+    # order
+    exp.long$gene_name <- factor(exp.long$gene_name,levels = unique(ginfo$gene_name))
+    if(!is.null(sample.order)){exp.long$variable <- factor(exp.long$variable,levels = sample.order)}
+    if(!is.null(termID.order)){exp.long$ID <- factor(exp.long$ID,levels = termID.order)}
+
+    # plot
+    ght <-
+      ggplot2::ggplot(exp.long) +
+      ggplot2::geom_tile(ggplot2::aes(x = gene_name,y = variable,fill = value),
+                         color = NA,
+                         show.legend = ht.legend) +
+      ggplot2::theme_bw(base_size = 14) +
+      ggplot2::coord_cartesian(expand = 0) +
+      ggplot2::scale_fill_gradient2(low = exp.col[1],mid = exp.col[2],high = exp.col[3],
+                                    midpoint = 0,name = 'Z-Score') +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,vjust = 0.5,hjust = 1,size = ght.geneText.size),
+                     axis.text = ggplot2::element_text(color = "black"),
+                     axis.ticks.x = ggplot2::element_blank(),
+                     panel.grid = ggplot2::element_blank(),
+                     plot.margin = ggplot2::margin(t = -0.1,
+                                                   r = .2,
+                                                   b = .2,
+                                                   l = .2,
+                                                   unit = "cm")) +
+      ggplot2::scale_y_discrete(position = "right") +
+      ggplot2::xlab('') + ggplot2::ylab('')
+
+    # whether facet heatmap
+    if(ght.facet == TRUE){
+      fght <- ght +
+        ggplot2::facet_wrap(~ID,ncol = 1,scales = ght.facet.scale,
+                            strip.position = "left") +
+        ggplot2::theme(strip.background = ggplot2::element_rect(color = NA,fill = "grey90"),
+                       strip.placement = "outside")
+    }else{
+      fght <- ght
+    }
+  }
 
   ###########################################
   if (newGsea == FALSE) {
@@ -656,6 +779,18 @@ gseaNb <- function(object = NULL,
     }
   }
 
+  # whether add gene expression heatmap
+  if(add.geneExpHt == TRUE){
+    pfinal <- aplot::plot_list(
+      gglist = list(pres +
+                      ggplot2::xlab(''), fght),
+      ncol = 1,
+      heights = c(1-ght.relHight, ght.relHight)
+    )
+  }else{
+    pfinal <- pres
+  }
+
   # output
-  return(pres)
+  return(pfinal)
 }
