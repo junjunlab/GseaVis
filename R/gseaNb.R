@@ -198,9 +198,14 @@ gseaNb <- function(object = NULL,
     line.col <- ggplot2::scale_color_gradient(low = curveCol[1], high = curveCol[2])
     legend.position = "none"
   }else{
+    # assign colors
+    mulcol <- curveCol
+    names(mulcol) <- unique(gsdata$Description)
+
+    # layers
     line <- ggplot2::geom_line(ggplot2::aes_(color = ~Description),
                                size = lineSize)
-    line.col <- ggplot2::scale_color_manual(values = curveCol,
+    line.col <- ggplot2::scale_color_manual(values = mulcol,
                                             labels = ledend.t,
                                             name = 'Term Name')
     legend.position = legend.position
