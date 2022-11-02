@@ -761,7 +761,7 @@ gseaNb <- function(object = NULL,
       }else{
         pres <-
           aplot::plot_list(
-            gglist = list(pLabelOut, pseg, prank),
+            gglist = list(pLabelOut, pseg + ggplot2::xlab(""), prank),
             ncol = 1,
             heights = c(0.5, 0.2, 0.3)
           )
