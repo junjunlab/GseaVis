@@ -103,6 +103,10 @@
 \item{ght.facet.scale}{the facet plot scale argumrnt, defalut is "free".}
 
 \item{termID.order}{the facet term ID orders, defalut is NULL.}
+
+\item{rank.gene}{add your gene label on rank plot, defalut is NULL.}
+
+\item{rank.gene.nudgey}{the gene label nudge y on rank plot, defalut is 2.}
 }
 \value{
 ggplot2 object

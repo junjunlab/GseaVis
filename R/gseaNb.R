@@ -54,6 +54,9 @@
 #' @param ght.facet.scale the facet plot scale argumrnt, defalut is "free".
 #' @param termID.order the facet term ID orders, defalut is NULL.
 #'
+#' @param rank.gene add your gene label on rank plot, defalut is NULL.
+#' @param rank.gene.nudgey the gene label nudge y on rank plot, defalut is 2.
+#'
 #' @importFrom ggplot2 aes_
 #' @import DOSE
 #' @import RColorBrewer
@@ -71,7 +74,8 @@
 #'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS')
 #'}
 
-globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes", "position","x","y","value","variable"))
+globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes",
+                  "position","x","y","value","variable","logfc","nudge_y","vjust"))
 
 # define function
 gseaNb <- function(object = NULL,
@@ -123,7 +127,9 @@ gseaNb <- function(object = NULL,
                    ght.geneText.size = 6,
                    ght.facet = FALSE,
                    ght.facet.scale = "free",
-                   termID.order = NULL) {
+                   termID.order = NULL,
+                   rank.gene = NULL,
+                   rank.gene.nudgey = 2) {
   # get dat
   gsdata <- purrr::map_df(geneSetID,function(setid){
     gsInfo(object,geneSetID = setid) %>%
@@ -501,6 +507,14 @@ gseaNb <- function(object = NULL,
     ggplot2::xlab("Rank in Ordered Dataset") +
     ggplot2::facet_wrap(~Description,ncol = 1)
 
+  if(subPlot > 2){
+    pseg <-
+      pseg +
+      ggplot2::theme(axis.title.x = ggplot2::element_blank())
+  }else{
+    pseg <- pseg
+  }
+
   ################################################
   # v <- seq(1, sum(gsdata$position), length.out = 9)
   # inv <- findInterval(rev(cumsum(gsdata$position)), v)
@@ -607,6 +621,44 @@ gseaNb <- function(object = NULL,
     ggplot2::coord_cartesian(expand = 0) +
     ggplot2::ylab("Ranked List") +
     ggplot2::xlab("Rank in Ordered Dataset")
+
+  if(add.geneExpHt == TRUE){
+    prank <- prank +
+      ggplot2::theme(axis.title.x = ggplot2::element_blank())
+  }else{
+    prank <- prank
+  }
+  # =================================================
+  # prank add gene label
+  if(kegg == FALSE){
+    rank.g <- data.frame(logfc = object@geneList,
+                         gene_name = names(object@geneList)) %>%
+      dplyr::mutate(x = 1:length(object@geneList))
+  }else{
+    rank.g <- data.frame(logfc = object@geneList,
+                         gene_name = object@gene2Symbol) %>%
+      dplyr::mutate(x = 1:length(object@geneList))
+  }
+
+  # filter rank genes
+  if(!is.null(rank.gene)){
+    target.rank.g <- rank.g %>%
+      dplyr::filter(gene_name %in% rank.gene) %>%
+      dplyr::mutate(vjust = ifelse(logfc > 0,"bottom","top"),
+                    nudge_y = ifelse(logfc > 0,-rank.gene.nudgey,rank.gene.nudgey))
+
+    # add rank gene label
+    prank <-
+      prank +
+      ggrepel::geom_text_repel(data = target.rank.g,
+                               ggplot2::aes(x = as.numeric(x),y = 0,
+                                            label = gene_name,
+                                            vjust = vjust,
+                                            nudge_y = nudge_y),
+                               max.overlaps = 200,direction = "x",angle = 90,
+                               fontface = "italic",
+                               size = geneSize)
+  }
 
   ###########################################
   # new color
@@ -761,7 +813,7 @@ gseaNb <- function(object = NULL,
       }else{
         pres <-
           aplot::plot_list(
-            gglist = list(pLabelOut, pseg + ggplot2::xlab(""), prank),
+            gglist = list(pLabelOut, pseg, prank),
             ncol = 1,
             heights = c(0.5, 0.2, 0.3)
           )
