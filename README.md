@@ -1,5 +1,5 @@
 
-# GseaVis <img src="man/gseaVis-logo.svg" align="right" height="200" />
+# GseaVis <img src="man/gseaVis-logo.png" align="right" height="200" />
 
 <!-- badges: start -->
 
