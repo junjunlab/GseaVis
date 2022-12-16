@@ -65,14 +65,14 @@
 #' @export
 #'
 #' @examples
-#'\donttest{# load data
+#'# load data
 #'test_data <- system.file("extdata", "gseaRes.RDS", package = "GseaVis")
 #'gseaRes <- readRDS(test_data)
 #'
 #'# all plot
 #'gseaNb(object = gseaRes,
-#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS')
-#'}
+#'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
+#'       subPlot = 2)
 
 globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes",
                   "position","x","y","value","variable","logfc","nudge_y","vjust"))
@@ -314,7 +314,7 @@ gseaNb <- function(object = NULL,
 
     # add gene on plot
     if (nrow(geneLabel) == 0) {
-      print("Your gene is not in this pathway! Please choose again!")
+      message("Your gene is not in this pathway! Please choose again!")
     } else {
       if (rmSegment == TRUE) {
         if (is.null(geneCol)) {
@@ -821,7 +821,7 @@ gseaNb <- function(object = NULL,
 
       # return(pres)
     } else {
-      print("Please give 1/2/3 parameters!")
+      message("Please give 1/2/3 parameters!")
     }
   } else {
     # combine

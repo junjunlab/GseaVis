@@ -115,14 +115,14 @@ ggplot2 object
 gseaNb
 }
 \examples{
-\donttest{# load data
+# load data
 test_data <- system.file("extdata", "gseaRes.RDS", package = "GseaVis")
 gseaRes <- readRDS(test_data)
 
 # all plot
 gseaNb(object = gseaRes,
-      geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS')
-}
+      geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
+      subPlot = 2)
 }
 \author{
 Jun Zhang
