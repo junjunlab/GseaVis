@@ -5,7 +5,7 @@ Maintainer: Jun Zhang <3219030654@stu.cpu.edu.cn>
 Authors@R: 
     person("Jun", "Zhang", , "3219030654@stu.cpu.edu.cn", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7692-9105"))
-Description: GseaVis can be used to mark your interesting genes on plot and support more parameters to handle your own GSEA plot. Thanks for the contributions from professor GuangChuangYu.
+Description: Mark your interesting genes on plot and support more parameters to handle your own 'GSEA' plot. Thanks for the contributions from professor GuangChuangYu.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
