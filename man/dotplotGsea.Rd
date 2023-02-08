@@ -34,9 +34,6 @@ a ggplot object.
 \description{
 dotplotGsea
 }
-\examples{
-\dontrun{dotplotGsea(data = ego3,topn = 10)}
-}
 \author{
 Jun Zhang
 }

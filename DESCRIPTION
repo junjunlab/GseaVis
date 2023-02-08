@@ -1,15 +1,17 @@
 Package: GseaVis
 Title: Implement for 'GSEA' Enrichment Visualization
-Version: 0.0.5
+Version: 0.0.6
 Maintainer: Jun Zhang <3219030654@stu.cpu.edu.cn>
 Authors@R: 
-    person("Jun", "Zhang", , "3219030654@stu.cpu.edu.cn", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-7692-9105"))
-Description: Mark your interesting genes on plot and support more parameters to handle your own 'GSEA' plot. Thanks for the contributions from professor GuangChuangYu.
+    c(
+    person(given = "Jun", family = "Zhang", email = "3219030654@stu.cpu.edu.cn", role = c("aut", "cre"),comment = c(ORCID = "0000-0001-7692-9105")),
+    person(given = "Guangchuang", family = "Yu", email = "guangchuangyu@gmail.com", role  = "ctb")
+    )
+Description: Mark your interesting genes on plot and support more parameters to handle your own gene set enrichment analysis plot.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Imports: 
     aplot,
     DOSE,

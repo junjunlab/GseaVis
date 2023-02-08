@@ -206,16 +206,21 @@ gseaNb <- function(object = NULL,
   }else{
     # assign colors
     mulcol <- curveCol
-    names(mulcol) <- unique(gsdata$Description)
+    # names(mulcol) <- unique(gsdata$Description)
+    names(mulcol) <- geneSetID
 
     # layers
     line <- ggplot2::geom_line(ggplot2::aes_(color = ~Description),
                                size = lineSize)
+
     line.col <- ggplot2::scale_color_manual(values = mulcol,
                                             labels = ledend.t,
                                             name = 'Term Name')
     legend.position = legend.position
   }
+
+  # order
+  gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
 
   # plot
   pcurve <-
@@ -476,6 +481,9 @@ gseaNb <- function(object = NULL,
   }else{
     pseg.b = 0.2
   }
+
+  # order
+  gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
 
   # plot
   pseg <-

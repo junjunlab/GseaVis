@@ -16,8 +16,6 @@
 #'
 #' @return a ggplot object.
 #' @export
-#' @examples
-#' \dontrun{dotplotGsea(data = ego3,topn = 10)}
 
 globalVariables(c('.data', 'Description', 'GeneRatio', 'NES', 'p.adjust', 'pvalue', 'type'))
 dotplotGsea <- function(data = NULL,
