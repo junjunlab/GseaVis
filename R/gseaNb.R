@@ -220,7 +220,12 @@ gseaNb <- function(object = NULL,
   }
 
   # order
-  gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
+  # gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
+  if(kegg == FALSE){
+    gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
+  }else{
+    gsdata$Description <- factor(gsdata$Description,levels = data_ga$Description)
+  }
 
   # plot
   pcurve <-
@@ -483,7 +488,12 @@ gseaNb <- function(object = NULL,
   }
 
   # order
-  gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
+  # gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
+  if(kegg == FALSE){
+    gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
+  }else{
+    gsdata1$Description <- factor(gsdata1$Description,levels = data_ga$Description)
+  }
 
   # plot
   pseg <-
