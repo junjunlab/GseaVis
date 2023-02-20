@@ -56,6 +56,8 @@
 #'
 #' @param rank.gene add your gene label on rank plot, defalut is NULL.
 #' @param rank.gene.nudgey the gene label nudge y on rank plot, defalut is 2.
+#' @param rm.newGsea.ticks whether remove right axis when you plot multiple terms with newGsea plot, defalut is TRUE.
+#' @param pFill the pvalue table fill color when you plot multiple terms with newGsea plot, defalut is transparent.
 #'
 #' @importFrom ggplot2 aes_
 #' @import DOSE
@@ -75,12 +77,13 @@
 #'       subPlot = 2)
 
 globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes",
-                  "position","x","y","value","variable","logfc","nudge_y","vjust"))
+                  "position","x","y","value","variable","logfc","nudge_y","vjust",
+                  "pLabel","px","py"))
 
 # define function
 gseaNb <- function(object = NULL,
                    subPlot = 3,
-                   lineSize = 0.8,
+                   lineSize = 1,
                    geneSetID = NULL,
                    rmSegment = FALSE,
                    termWidth = 40,
@@ -101,14 +104,16 @@ gseaNb <- function(object = NULL,
                    geneSize = 4,
                    newGsea = FALSE,
                    addPoint = TRUE,
-                   newCurveCol = c("#336699", "white", "#993399"),
+                   newCurveCol = c("#336699", "grey80", "#993399"),
                    newHtCol = c("#336699", "white", "#993399"),
+                   rm.newGsea.ticks = TRUE,
                    rmHt = FALSE,
                    addPval = FALSE,
                    pvalX = 0.9,
                    pvalY = 0.9,
                    pvalSize = 4,
-                   pCol = "grey30",
+                   pCol = "grey0",
+                   pFill = "transparent",
                    pHjust = 1,
                    rmPrefix = TRUE,
                    nesDigit = 2,
@@ -195,6 +200,8 @@ gseaNb <- function(object = NULL,
   if(length(geneSetID) != 1){
     ledend.t <- niceTit
     niceTit <- ''
+  }else{
+    ledend.t <- niceTit
   }
 
   ################################################
@@ -205,9 +212,11 @@ gseaNb <- function(object = NULL,
     legend.position = "none"
   }else{
     # assign colors
-    mulcol <- curveCol
-    # names(mulcol) <- unique(gsdata$Description)
-    names(mulcol) <- geneSetID
+    if(newGsea != TRUE){
+      mulcol <- curveCol
+      # names(mulcol) <- unique(gsdata$Description)
+      names(mulcol) <- geneSetID
+    }
 
     # layers
     line <- ggplot2::geom_line(ggplot2::aes_(color = ~Description),
@@ -261,22 +270,39 @@ gseaNb <- function(object = NULL,
   # calculate midpoint
   midpoint <- sum(range(gsdata$runningScore)) / 2
 
+  # order
+  # gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
+  if(kegg == FALSE){
+    gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
+  }else{
+    gsdata1$Description <- factor(gsdata1$Description,levels = data_ga$Description)
+  }
+
+  # facet labels
+  facet.label <- ledend.t
+  names(facet.label) <- geneSetID
+
   # plot
+  if(length(newCurveCol) > 3){
+    gseaNewCol <- ggplot2::scale_color_gradientn(colors = newCurveCol)
+  }else{
+    gseaNewCol <- ggplot2::scale_color_gradient2(low = newCurveCol[1],
+                                                 mid = newCurveCol[2],
+                                                 high = newCurveCol[3],
+                                                 midpoint = midpoint)
+  }
+
   pnew <-
     ggplot2::ggplot(gsdata,
                     ggplot2::aes_(x = ~x, y = ~runningScore, color = ~runningScore)) +
+    ggplot2::geom_line(size = lineSize) +
     ggplot2::geom_hline(yintercept = 0,
                         size = lineSize,
                         color = "black",
                         lty = "dashed") +
-    ggplot2::geom_line(size = lineSize) +
     ggplot2::geom_segment(data = gsdata1, ggplot2::aes_(xend = ~x, yend = 0)) +
     ggplot2::theme_bw(base_size = 14) +
-    # scale_color_gradient(low = '#336699',high = '#993399') +
-    ggplot2::scale_color_gradient2(low = newCurveCol[1],
-                                   mid = newCurveCol[2],
-                                   high = newCurveCol[3],
-                                   midpoint = midpoint) +
+    gseaNewCol +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::theme(legend.position = "none",
                    plot.title = ggplot2::element_text(hjust = 0.5),
@@ -292,6 +318,28 @@ gseaNb <- function(object = NULL,
                                                  unit = "cm")) +
     ggplot2::ylab("Running Enrichment Score") +
     ggplot2::ggtitle(niceTit)
+
+  # facet plot if geneSetID more than 1
+  if(length(geneSetID) > 1){
+    pnew <- pnew +
+      ggplot2::facet_wrap(~Description,
+                          ncol = 1,
+                          scales = "free_y",
+                          strip.position = "left",
+                          labeller = ggplot2::labeller(Description = facet.label)) +
+      ggplot2::theme(panel.spacing = ggplot2::unit(0,"mm"),
+                     panel.grid = ggplot2::element_blank(),
+                     strip.background = ggplot2::element_rect(fill = "grey95"),
+                     strip.text.y.left = ggplot2::element_text(angle = 0,size = 12)) +
+      ggplot2::scale_y_continuous(position = "right")
+  }
+
+  # whether remove strip aixs
+  if(rm.newGsea.ticks == TRUE){
+    pnew <- pnew +
+      ggplot2::theme(axis.ticks.y = ggplot2::element_blank(),
+                     axis.text.y = ggplot2::element_blank())
+  }
 
   # whether add point
   if (addPoint == TRUE) {
@@ -316,7 +364,13 @@ gseaNb <- function(object = NULL,
     # whether mark top genes
     if(markTopgene == TRUE){
       # add gene name
-      geneLabel <- gsdata1 %>% dplyr::arrange(x) %>% dplyr::slice_head(n = topGeneN)
+      # geneLabel <- gsdata1 %>% dplyr::arrange(x) %>% dplyr::slice_head(n = topGeneN)
+      geneLabel <- purrr::map_df(unique(gsdata1$Description),function(dc){
+        topg <- gsdata1 %>%
+          dplyr::filter(Description == dc) %>%
+          dplyr::arrange(x) %>%
+          dplyr::slice_head(n = topGeneN)
+      })
     }else{
       # add gene name
       geneLabel <- gsdata1 %>% dplyr::filter(gene_name %in% addGene)
@@ -417,38 +471,59 @@ gseaNb <- function(object = NULL,
   ###########################################
   # add NES Pvalue
   if (addPval == TRUE) {
-    pLabel <- paste0(
-      "NES: ",
-      round(data_ga$NES, digits = nesDigit),
-      "\n",
-      "Pvalue: ",
-      # round(data_ga$pvalue, digits = pDigit),
-      ifelse(data_ga$pvalue < 0.001,"< 0.001",round(data_ga$pvalue, digits = pDigit)),
-      "\n",
-      "Ajusted Pvalue: ",
-      # round(data_ga$p.adjust, digits = pDigit),
-      ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)),
-      "\n",
-      sep = " "
-    )
+    if(newGsea != TRUE){
+      pLabel <- paste0(
+        "NES: ",
+        round(data_ga$NES, digits = nesDigit),
+        "\n",
+        "Pvalue: ",
+        # round(data_ga$pvalue, digits = pDigit),
+        ifelse(data_ga$pvalue < 0.001,"< 0.001",round(data_ga$pvalue, digits = pDigit)),
+        "\n",
+        "Ajusted Pvalue: ",
+        # round(data_ga$p.adjust, digits = pDigit),
+        ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)),
+        "\n",
+        sep = " "
+      )
 
-    # define pvalue position
-    # if (data_ga$NES > 0) {
-    #   px <- pvalX * nrow(gsdata)
-    #   py <-
-    #     pvalY * sum(abs(range(gsdata$runningScore))) + min(gsdata$runningScore)
-    # } else {
-    #   px <- pvalX * nrow(gsdata)
-    #   py <-
-    #     pvalY * sum(abs(range(gsdata$runningScore))) + min(gsdata$runningScore)
-    # }
+      # define pvalue position
+      px <- pvalX * nrow(gsdata[which(gsdata$id == geneSetID[1]),])
+      py <-
+        pvalY * sum(abs(range(gsdata$runningScore))) + min(gsdata$runningScore)
 
-    px <- pvalX * nrow(gsdata[which(gsdata$id == geneSetID[1]),])
-    py <-
-      pvalY * sum(abs(range(gsdata$runningScore))) + min(gsdata$runningScore)
+    }else{
+      purrr::map_df(unique(data_ga$Description),function(j){
+        tmp <- data_ga %>% dplyr::filter(Description == j)
+        tmpgsdata <- gsdata %>%
+          dplyr::filter(Description == j)
+
+        # pvalue label
+        pLabel <- paste0(
+          "NES: ",
+          round(tmp$NES, digits = nesDigit),
+          "\n",
+          "Pvalue: ",
+          # round(data_ga$pvalue, digits = pDigit),
+          ifelse(tmp$pvalue < 0.001,"< 0.001",round(tmp$pvalue, digits = pDigit)),
+          "\n",
+          "Ajusted Pvalue: ",
+          # round(data_ga$p.adjust, digits = pDigit),
+          ifelse(tmp$p.adjust < 0.001,"< 0.001",round(tmp$p.adjust, digits = pDigit)),
+          "\n",
+          sep = " "
+        )
+
+        # xy coordinate
+        px <- pvalX * nrow(tmpgsdata)
+        py <- pvalY * sum(abs(range(tmpgsdata$runningScore))) + min(tmpgsdata$runningScore)
+
+        return(data.frame(pLabel = pLabel,px = px,py = py,Description = j,
+                          x = 0,runningScore = 0))
+      }) -> ptable
+    }
 
     # add pvlaue label
-
     if(length(geneSetID) == 1){
       pLabelOut <-
         plabel +
@@ -461,14 +536,26 @@ gseaNb <- function(object = NULL,
                           fontface = "italic",
                           hjust = pHjust)
     }else{
-      mytable <- tibble::tibble(x = px, y = py,
-                                table = list(tibble::tibble('NES' = round(data_ga$NES, digits = nesDigit),
-                                                            'Pvalue' = ifelse(data_ga$pvalue < 0.001,"< 0.001",round(data_ga$pvalue, digits = pDigit)),
-                                                            'Ajusted Pvalue' = ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)))))
+      if(newGsea == FALSE){
+        mytable <- tibble::tibble(x = px, y = py,
+                                  table = list(tibble::tibble('NES' = round(data_ga$NES, digits = nesDigit),
+                                                              'Pvalue' = ifelse(data_ga$pvalue < 0.001,"< 0.001",round(data_ga$pvalue, digits = pDigit)),
+                                                              'Ajusted Pvalue' = ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)))))
 
 
-      pLabelOut <- plabel +
-        ggpp::geom_table(data = mytable, ggplot2::aes(px, py, label = table))
+        pLabelOut <- plabel +
+          ggpp::geom_table(data = mytable, ggplot2::aes(px, py, label = table))
+      }else{
+        pLabelOut <- plabel +
+          ggplot2::geom_label(data = ptable,ggplot2::aes(x = px,y = py,
+                                                         label = pLabel),
+                              color = pCol,
+                              fill = pFill,
+                              size = pvalSize,
+                              fontface = "italic",
+                              hjust = pHjust)
+      }
+
     }
 
   } else {

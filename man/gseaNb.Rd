@@ -107,6 +107,10 @@
 \item{rank.gene}{add your gene label on rank plot, defalut is NULL.}
 
 \item{rank.gene.nudgey}{the gene label nudge y on rank plot, defalut is 2.}
+
+\item{rm.newGsea.ticks}{whether remove right axis when you plot multiple terms with newGsea plot, defalut is TRUE.}
+
+\item{pFill}{the pvalue table fill color when you plot multiple terms with newGsea plot, defalut is transparent.}
 }
 \value{
 ggplot2 object
