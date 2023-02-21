@@ -233,7 +233,7 @@ gseaNb <- function(object = NULL,
 
   # order
   # gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
-  if(kegg == FALSE){
+  if(gsdata$id[1] == gsdata$Description[1]){
     gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
   }else{
     gsdata$Description <- factor(gsdata$Description,levels = data_ga$Description)
@@ -275,7 +275,7 @@ gseaNb <- function(object = NULL,
 
   # order
   # gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
-  if(kegg == FALSE){
+  if(gsdata$id[1] == gsdata$Description[1]){
     gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
   }else{
     gsdata1$Description <- factor(gsdata1$Description,levels = data_ga$Description)
@@ -579,7 +579,7 @@ gseaNb <- function(object = NULL,
 
   # order
   # gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
-  if(kegg == FALSE){
+  if(gsdata$id[1] == gsdata$Description[1]){
     gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
   }else{
     gsdata1$Description <- factor(gsdata1$Description,levels = data_ga$Description)
