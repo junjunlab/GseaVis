@@ -78,7 +78,7 @@
 
 globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes",
                   "position","x","y","value","variable","logfc","nudge_y","vjust",
-                  "pLabel","px","py"))
+                  "pLabel","px","py","id"))
 
 # define function
 gseaNb <- function(object = NULL,
@@ -375,8 +375,17 @@ gseaNb <- function(object = NULL,
       geneLabel <- purrr::map_df(unique(gsdata1$Description),function(dc){
         topg <- gsdata1 %>%
           dplyr::filter(Description == dc) %>%
-          dplyr::arrange(x) %>%
-          dplyr::slice_head(n = topGeneN)
+          dplyr::arrange(x)
+
+        # check NES score
+        nes <- data_ga %>% dplyr::filter(Description == dc)
+
+        if(nes$NES > 0){
+          topg <- topg %>% dplyr::slice_head(n = topGeneN)
+        }else{
+          topg <- topg %>% dplyr::slice_tail(n = topGeneN)
+        }
+
       })
     }else{
       # add gene name
