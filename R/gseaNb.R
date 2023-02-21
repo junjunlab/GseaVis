@@ -212,16 +212,20 @@ gseaNb <- function(object = NULL,
     legend.position = "none"
   }else{
     # assign colors
-    if(newGsea != TRUE){
+    if(newGsea == FALSE){
       mulcol <- curveCol
-      # names(mulcol) <- unique(gsdata$Description)
-      names(mulcol) <- geneSetID
+
+      if(gsdata$id[1] == gsdata$Description[1]){
+        names(mulcol) <- geneSetID
+      }else{
+        names(mulcol) <- unique(gsdata$Description)
+      }
 
       line.col <- ggplot2::scale_color_manual(values = mulcol,
                                               labels = ledend.t,
                                               name = 'Term Name')
     }else{
-      line.col <- NULL
+      line.col <- ggplot2::scale_color_brewer()
     }
 
     # layers
@@ -486,7 +490,6 @@ gseaNb <- function(object = NULL,
         "Ajusted Pvalue: ",
         # round(data_ga$p.adjust, digits = pDigit),
         ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)),
-        "\n",
         sep = " "
       )
 
@@ -496,10 +499,10 @@ gseaNb <- function(object = NULL,
         pvalY * sum(abs(range(gsdata$runningScore))) + min(gsdata$runningScore)
 
     }else{
-      purrr::map_df(unique(data_ga$Description),function(j){
-        tmp <- data_ga %>% dplyr::filter(Description == j)
+      purrr::map_df(unique(data_ga$ID),function(j){
+        tmp <- data_ga %>% dplyr::filter(ID == j)
         tmpgsdata <- gsdata %>%
-          dplyr::filter(Description == j)
+          dplyr::filter(id == j)
 
         # pvalue label
         pLabel <- paste0(
@@ -513,7 +516,6 @@ gseaNb <- function(object = NULL,
           "Ajusted Pvalue: ",
           # round(data_ga$p.adjust, digits = pDigit),
           ifelse(tmp$p.adjust < 0.001,"< 0.001",round(tmp$p.adjust, digits = pDigit)),
-          "\n",
           sep = " "
         )
 
@@ -521,7 +523,7 @@ gseaNb <- function(object = NULL,
         px <- pvalX * nrow(tmpgsdata)
         py <- pvalY * sum(abs(range(tmpgsdata$runningScore))) + min(tmpgsdata$runningScore)
 
-        return(data.frame(pLabel = pLabel,px = px,py = py,Description = j,
+        return(data.frame(pLabel = pLabel,px = px,py = py,id = j,
                           x = 0,runningScore = 0))
       }) -> ptable
     }
