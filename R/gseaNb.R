@@ -325,11 +325,11 @@ gseaNb <- function(object = NULL,
   # facet plot if geneSetID more than 1
   if(length(geneSetID) > 1){
     pnew <- pnew +
-      ggplot2::facet_wrap(~Description,
+      ggplot2::facet_wrap(~id,
                           ncol = 1,
                           scales = "free_y",
                           strip.position = "left",
-                          labeller = ggplot2::labeller(Description = facet.label)) +
+                          labeller = ggplot2::labeller(id = facet.label)) +
       ggplot2::theme(panel.spacing = ggplot2::unit(0,"mm"),
                      panel.grid = ggplot2::element_blank(),
                      strip.background = ggplot2::element_rect(fill = "grey95"),
