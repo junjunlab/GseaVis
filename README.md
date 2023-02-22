@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 
-The goal of GseaVis is to visualize GSEA enrichment results as an implement package for **enrichplot** _gseaplot2_ function. And some codes origin from **enrichplot** package, thanks for **Guangchuang Yu** professor's contribution!
+The goal of GseaVis is to visualize GSEA enrichment results as an implement package for **enrichplot** _gseaplot2_ function. And some codes origin from **enrichplot** package, thanks for **Guangchuang Yu** professor's contribution! The enrichment results from [**clusterProfiler**](https://github.com/YuLab-SMU/clusterProfiler) and [**GSEA software**](http://www.gsea-msigdb.org/gsea/index.jsp) can be supported as input for **GseaVis** for visualization.
 
 You can mark your gene name on GSEA plot and this package also support more avaliable parameters to customize your own plot.
 
