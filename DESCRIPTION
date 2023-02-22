@@ -1,6 +1,6 @@
 Package: GseaVis
 Title: Implement for 'GSEA' Enrichment Visualization
-Version: 0.0.7
+Version: 0.0.8
 Maintainer: Jun Zhang <3219030654@stu.cpu.edu.cn>
 Authors@R: 
     c(
@@ -14,6 +14,7 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
     aplot,
+    clusterProfiler,
     DOSE,
     dplyr,
     ggplot2,
@@ -24,6 +25,7 @@ Imports:
     magrittr,
     purrr,
     RColorBrewer,
+    readr,
     reshape2,
     stringr,
     tibble,

@@ -6,6 +6,9 @@
 \arguments{
 \item{object}{GSEA enrich results.}
 
+\item{filePath}{filePath the path of the GSEA software enrichment
+outputs or "readGseaFile" object, defalut is NULL.}
+
 \item{subPlot}{which plot to show, 1/2/3, default is 3.}
 
 \item{lineSize}{curve line size. default is 0.8.}

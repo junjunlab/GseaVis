@@ -2,6 +2,8 @@
 #' @name gseaNb
 #' @author Jun Zhang
 #' @param object GSEA enrich results.
+#' @param filePath filePath the path of the GSEA software enrichment
+#'  outputs or "readGseaFile" object, defalut is NULL.
 #' @param subPlot which plot to show, 1/2/3, default is 3.
 #' @param lineSize curve line size. default is 0.8.
 #' @param geneSetID which pathway name to plot.
@@ -82,6 +84,7 @@ globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes",
 
 # define function
 gseaNb <- function(object = NULL,
+                   filePath = NULL,
                    subPlot = 3,
                    lineSize = 1,
                    geneSetID = NULL,
@@ -135,46 +138,83 @@ gseaNb <- function(object = NULL,
                    termID.order = NULL,
                    rank.gene = NULL,
                    rank.gene.nudgey = 2) {
-  # get dat
-  gsdata <- purrr::map_df(geneSetID,function(setid){
-    gsInfo(object,geneSetID = setid) %>%
-      dplyr::mutate(id = setid)
-  })
-
-  if(kegg == FALSE){
-    # filter in pathway gene
-    # gsdata1 <- gsdata %>%
-    #   dplyr::mutate("gene_name" = names(object@geneList)) %>%
-    #   dplyr::filter(position == 1)
-
-    gsdata1 <- purrr::map_df(unique(gsdata$Description),function(setid){
-      tmp <- gsdata %>%
-        dplyr::filter(Description == setid) %>%
-        dplyr::mutate("gene_name" = names(object@geneList)) %>%
-        dplyr::filter(position == 1)
+  ##################################################################################
+  # prepare data for plot
+  ##################################################################################
+  if(is.null(filePath)){
+    gsdata <- purrr::map_df(geneSetID,function(setid){
+      gsInfo(object,geneSetID = setid) %>%
+        dplyr::mutate(id = setid)
     })
+
+    if(kegg == FALSE){
+      # filter in pathway gene
+      # gsdata1 <- gsdata %>%
+      #   dplyr::mutate("gene_name" = names(object@geneList)) %>%
+      #   dplyr::filter(position == 1)
+
+      gsdata1 <- purrr::map_df(unique(gsdata$Description),function(setid){
+        tmp <- gsdata %>%
+          dplyr::filter(Description == setid) %>%
+          dplyr::mutate("gene_name" = names(object@geneList)) %>%
+          dplyr::filter(position == 1)
+      })
+    }else{
+      # filter in pathway gene
+      gene2Symbol <- object@gene2Symbol %>% data.frame()
+
+      # gsdata1 <- gsdata %>%
+      #   dplyr::mutate("gene_name" = gene2Symbol$.) %>%
+      #   dplyr::filter(position == 1)
+
+      gsdata1 <- purrr::map_df(unique(gsdata$Description),function(setid){
+        tmp <- gsdata %>%
+          dplyr::filter(Description == setid) %>%
+          dplyr::mutate("gene_name" = gene2Symbol$.) %>%
+          dplyr::filter(position == 1)
+      })
+    }
+
+    # to dataframe
+    data_ga <- data.frame(object) %>%
+      dplyr::filter(ID %in% geneSetID)
+    data_ga <- data_ga[unique(gsdata$id),]
   }else{
-    # filter in pathway gene
-    gene2Symbol <- object@gene2Symbol %>% data.frame()
+    # load GSEA software outputs
+    if(is.character(filePath)){
+      gsea.res <- readGseaFile(filePath = filePath)
+    }else{
+      gsea.res <- filePath
+    }
 
-    # gsdata1 <- gsdata %>%
-    #   dplyr::mutate("gene_name" = gene2Symbol$.) %>%
-    #   dplyr::filter(position == 1)
+    # get rank data
+    gsdata <- purrr::map_df(geneSetID,function(setid){
+      gsInfoNew(geneList = gsea.res$glist,
+                geneSet = gsea.res$gset,
+                geneSetID = setid) %>%
+        dplyr::mutate(id = setid)
+    })
 
+    # filter terms gene
     gsdata1 <- purrr::map_df(unique(gsdata$Description),function(setid){
       tmp <- gsdata %>%
         dplyr::filter(Description == setid) %>%
-        dplyr::mutate("gene_name" = gene2Symbol$.) %>%
+        dplyr::mutate("gene_name" = names(gsea.res$glist)) %>%
         dplyr::filter(position == 1)
     })
+
+    # to dataframe
+    data_ga <- gsea.res$meta %>%
+      dplyr::filter(ID %in% geneSetID) %>%
+      tibble::column_to_rownames("ID") %>%
+      dplyr::mutate(ID = rownames(.))
+    data_ga <- data_ga[unique(gsdata$id),]
   }
 
-  # to dataframe
-  data_ga <- data.frame(object) %>%
-    dplyr::filter(ID %in% geneSetID)
-  data_ga <- data_ga[unique(gsdata$id),]
 
-  ################################################
+  ##################################################################################
+  # plot
+  ##################################################################################
   # nice title
   niceTit <- purrr::map_chr(unique(gsdata$Description),function(x){
     tit <- unlist(strsplit(x, split = "_"))
@@ -238,9 +278,9 @@ gseaNb <- function(object = NULL,
   # order
   # gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
   if(gsdata$id[1] == gsdata$Description[1]){
-    gsdata$Description <- factor(gsdata$Description,levels = geneSetID)
+    gsdata$id <- factor(gsdata$id,levels = geneSetID)
   }else{
-    gsdata$Description <- factor(gsdata$Description,levels = data_ga$Description)
+    gsdata$id <- factor(gsdata$id,levels = data_ga$id)
   }
 
   # plot
@@ -280,9 +320,9 @@ gseaNb <- function(object = NULL,
   # order
   # gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
   if(gsdata$id[1] == gsdata$Description[1]){
-    gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
+    gsdata1$id <- factor(gsdata1$id,levels = geneSetID)
   }else{
-    gsdata1$Description <- factor(gsdata1$Description,levels = data_ga$Description)
+    gsdata1$id <- factor(gsdata1$id,levels = data_ga$id)
   }
 
   # facet labels
@@ -535,6 +575,13 @@ gseaNb <- function(object = NULL,
         return(data.frame(pLabel = pLabel,px = px,py = py,id = j,
                           x = 0,runningScore = 0))
       }) -> ptable
+
+      # order
+      if(gsdata$id[1] == gsdata$Description[1]){
+        ptable$id <- factor(ptable$id,levels = geneSetID)
+      }else{
+        ptable$id <- factor(ptable$id,levels = data_ga$id)
+      }
     }
 
     # add pvlaue label
@@ -749,14 +796,20 @@ gseaNb <- function(object = NULL,
   }
   # =================================================
   # prank add gene label
-  if(kegg == FALSE){
-    rank.g <- data.frame(logfc = object@geneList,
-                         gene_name = names(object@geneList)) %>%
-      dplyr::mutate(x = 1:length(object@geneList))
+  if(is.null(filePath)){
+    if(kegg == FALSE){
+      rank.g <- data.frame(logfc = object@geneList,
+                           gene_name = names(object@geneList)) %>%
+        dplyr::mutate(x = 1:length(object@geneList))
+    }else{
+      rank.g <- data.frame(logfc = object@geneList,
+                           gene_name = object@gene2Symbol) %>%
+        dplyr::mutate(x = 1:length(object@geneList))
+    }
   }else{
-    rank.g <- data.frame(logfc = object@geneList,
-                         gene_name = object@gene2Symbol) %>%
-      dplyr::mutate(x = 1:length(object@geneList))
+    rank.g <- data.frame(logfc = gsea.res$glist,
+                         gene_name = names(gsea.res$glist)) %>%
+      dplyr::mutate(x = 1:length(gsea.res$glist))
   }
 
   # filter rank genes
@@ -831,10 +884,14 @@ gseaNb <- function(object = NULL,
     })
 
     # get gene position
-    gpos <- if(kegg == TRUE){
-      match(target.g$gene_name,object@gene2Symbol)
+    if(is.null(filePath)){
+      gpos <- if(kegg == TRUE){
+        match(target.g$gene_name,object@gene2Symbol)
+      }else{
+        match(target.g$gene_name,names(object@geneList))
+      }
     }else{
-      match(target.g$gene_name,names(object@geneList))
+      gpos <- match(target.g$gene_name,names(gsea.res$glist))
     }
 
     ginfo <- target.g %>%
