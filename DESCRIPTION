@@ -32,3 +32,6 @@ Imports:
     utils
 URL: https://github.com/junjunlab/GseaVis
 BugReports: https://github.com/junjunlab/GseaVis/issues
+Depends: 
+    R (>= 2.10)
+LazyData: true

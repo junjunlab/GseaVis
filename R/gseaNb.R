@@ -1027,3 +1027,12 @@ gseaNb <- function(object = NULL,
   # output
   return(pfinal)
 }
+
+
+#' This is a test data for this package
+#' test data describtion
+#'
+#' @name intergrated
+#' @docType data
+#' @author JunZhang
+"intergrated"
