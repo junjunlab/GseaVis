@@ -78,4 +78,7 @@ readGseaFile <- function(filePath = NULL){
   res <- list(meta = enrich.meta.new,
               glist = glist,
               gset = gset)
+
+  class(res) <- "GSEAfromSoft"
+  return(res)
 }

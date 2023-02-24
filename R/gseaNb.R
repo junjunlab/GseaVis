@@ -280,7 +280,7 @@ gseaNb <- function(object = NULL,
   if(gsdata$id[1] == gsdata$Description[1]){
     gsdata$id <- factor(gsdata$id,levels = geneSetID)
   }else{
-    gsdata$id <- factor(gsdata$id,levels = data_ga$id)
+    gsdata$id <- factor(gsdata$id,levels = data_ga$ID)
   }
 
   # plot
@@ -322,7 +322,7 @@ gseaNb <- function(object = NULL,
   if(gsdata$id[1] == gsdata$Description[1]){
     gsdata1$id <- factor(gsdata1$id,levels = geneSetID)
   }else{
-    gsdata1$id <- factor(gsdata1$id,levels = data_ga$id)
+    gsdata1$id <- factor(gsdata1$id,levels = data_ga$ID)
   }
 
   # facet labels
@@ -580,7 +580,7 @@ gseaNb <- function(object = NULL,
       if(gsdata$id[1] == gsdata$Description[1]){
         ptable$id <- factor(ptable$id,levels = geneSetID)
       }else{
-        ptable$id <- factor(ptable$id,levels = data_ga$id)
+        ptable$id <- factor(ptable$id,levels = data_ga$ID)
       }
     }
 
@@ -802,9 +802,15 @@ gseaNb <- function(object = NULL,
                            gene_name = names(object@geneList)) %>%
         dplyr::mutate(x = 1:length(object@geneList))
     }else{
-      rank.g <- data.frame(logfc = object@geneList,
-                           gene_name = object@gene2Symbol) %>%
-        dplyr::mutate(x = 1:length(object@geneList))
+      # check gene2Symbol in object
+      if(length(object@gene2Symbol) > 0){
+        rank.g <- data.frame(logfc = object@geneList,
+                             gene_name = object@gene2Symbol) %>%
+          dplyr::mutate(x = 1:length(object@geneList))
+      }else{
+        message("Please use readble gene symbols for your
+                KEGG results('clusterProfiler::setReadable()')!")
+      }
     }
   }else{
     rank.g <- data.frame(logfc = gsea.res$glist,
