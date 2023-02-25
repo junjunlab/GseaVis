@@ -533,7 +533,7 @@ gseaNb <- function(object = NULL,
   ###########################################
   # add NES Pvalue
   if (addPval == TRUE) {
-    if(newGsea != TRUE){
+    if(length(geneSetID) == 1 | newGsea == FALSE){
       pLabel <- paste0(
         "NES: ",
         round(data_ga$NES, digits = nesDigit),
