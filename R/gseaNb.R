@@ -246,9 +246,15 @@ gseaNb <- function(object = NULL,
 
   ################################################
   if(length(geneSetID) == 1){
-    line <- ggplot2::geom_line(ggplot2::aes_(color = ~runningScore),
-                               size = lineSize)
-    line.col <- ggplot2::scale_color_gradient(low = curveCol[1], high = curveCol[2])
+    if(length(curveCol) == 1){
+      line <- ggplot2::geom_line(color = curveCol,size = lineSize)
+      line.col <- NULL
+    }else{
+      line <- ggplot2::geom_line(ggplot2::aes_(color = ~runningScore),
+                                 size = lineSize)
+      line.col <- ggplot2::scale_color_gradient(low = curveCol[1], high = curveCol[2])
+    }
+
     legend.position = "none"
   }else{
     # assign colors
