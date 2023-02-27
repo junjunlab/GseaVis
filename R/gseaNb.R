@@ -974,17 +974,23 @@ gseaNb <- function(object = NULL,
       # return(pres)
     } else if (subPlot == 2) {
       # combine
+      if(length(geneSetID) == 1){
+        seg.ht = 0.2
+      }else{
+        seg.ht = 0.5
+      }
+
       if (rmHt == FALSE){
         pres <- aplot::plot_list(
           gglist = list(pLabelOut, pseg_ht),
           ncol = 1,
-          heights = c(0.8, 0.2)
+          heights = c(0.8, seg.ht)
         )
       }else{
         pres <- aplot::plot_list(
           gglist = list(pLabelOut, pseg),
           ncol = 1,
-          heights = c(0.8, 0.2)
+          heights = c(0.8, seg.ht)
         )
       }
 
