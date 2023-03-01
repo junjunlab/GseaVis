@@ -14,8 +14,13 @@ readGseaFile <- function(filePath = NULL){
   # 1.prepare meta data
   # ==================================================================================
   enrich.report <- list.files(filePath,
-                              pattern = "^gsea_report.*.tsv",
+                              # pattern = "^gsea_report.*.tsv",
+                              pattern = "^gsea_report.*.(tsv|xls|xlsx)$",
                               full.names = TRUE)
+
+  # check suffix
+  suffix <- unlist(strsplit(enrich.report[1],split = "\\."))
+  suffix <- suffix[length(suffix)]
 
   # read to table
   purrr::map_df(enrich.report,function(x){
@@ -30,12 +35,15 @@ readGseaFile <- function(filePath = NULL){
   # x = 1
   purrr::map_df(seq_along(1:nrow(enrich.meta)),function(x){
     # check whether file exist
-    dir.file <- paste(filePath,enrich.meta$ID[x],".tsv",sep = "")
+    dir.file <- paste(filePath,enrich.meta$ID[x],".",suffix,sep = "")
     if(file.exists(dir.file)){
       tmp <- suppressMessages(readr::read_tsv(dir.file,show_col_types = FALSE)) %>%
         dplyr::mutate(Description = enrich.meta$ID[x],
                       id = enrich.meta$ID[x])
-      tmp <- tmp[,c(-3,-8)]
+
+      # tmp <- tmp[,c(-3,-8)]
+      tmp <- cbind(tmp[,c(1:2)],tmp[,c("RANK IN GENE LIST","RANK METRIC SCORE",
+                                       "RUNNING ES","CORE ENRICHMENT","Description","id")])
     }
     # return(tmp)
   }) -> enrich.rank
@@ -64,7 +72,8 @@ readGseaFile <- function(filePath = NULL){
   # ==================================================================================
   # preprare geneList
   enrich.gene <- list.files(filePath,
-                            pattern = "^ranked_gene.*.tsv",
+                            # pattern = "^ranked_gene.*.tsv",
+                            pattern = "^ranked_gene.*.(tsv|xls|xlsx)$",
                             full.names = T)
 
   genelist <- utils::read.table(enrich.gene,sep = "\t",header = TRUE)
