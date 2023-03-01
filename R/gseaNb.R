@@ -275,7 +275,7 @@ gseaNb <- function(object = NULL,
     }
 
     # layers
-    line <- ggplot2::geom_line(ggplot2::aes_(color = ~Description),
+    line <- ggplot2::geom_line(ggplot2::aes_(color = ~id),
                                size = lineSize)
 
     legend.position = legend.position
