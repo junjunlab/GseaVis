@@ -644,14 +644,14 @@ gseaNb <- function(object = NULL,
   # order
   # gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
   if(gsdata$id[1] == gsdata$Description[1]){
-    gsdata1$Description <- factor(gsdata1$Description,levels = geneSetID)
+    gsdata1$id <- factor(gsdata1$id,levels = geneSetID)
   }else{
-    gsdata1$Description <- factor(gsdata1$Description,levels = data_ga$Description)
+    gsdata1$id <- factor(gsdata1$id,levels = data_ga$ID)
   }
 
   # plot
   pseg <-
-    ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore,color = ~Description)) +
+    ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore,color = ~id)) +
     ggplot2::geom_segment(data = gsdata1,
                           ggplot2::aes_(x = ~x,
                                         xend = ~x,
@@ -677,7 +677,7 @@ gseaNb <- function(object = NULL,
                                                  l = .2,
                                                  unit = "cm")) +
     ggplot2::xlab("Rank in Ordered Dataset") +
-    ggplot2::facet_wrap(~Description,ncol = 1)
+    ggplot2::facet_wrap(~id,ncol = 1)
 
   if(subPlot > 2){
     pseg <-
