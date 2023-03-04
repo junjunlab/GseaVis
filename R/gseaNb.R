@@ -261,11 +261,13 @@ gseaNb <- function(object = NULL,
     if(newGsea == FALSE){
       mulcol <- curveCol
 
-      if(gsdata$id[1] == gsdata$Description[1]){
-        names(mulcol) <- geneSetID
-      }else{
-        names(mulcol) <- unique(gsdata$Description)
-      }
+      # if(gsdata$id[1] == gsdata$Description[1]){
+      #   names(mulcol) <- geneSetID
+      # }else{
+      #   names(mulcol) <- unique(gsdata$Description)
+      # }
+
+      names(mulcol) <- geneSetID
 
       line.col <- ggplot2::scale_color_manual(values = mulcol,
                                               labels = ledend.t,
