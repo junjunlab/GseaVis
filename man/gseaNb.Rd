@@ -114,6 +114,8 @@ outputs or "readGseaFile" object, defalut is NULL.}
 \item{rm.newGsea.ticks}{whether remove right axis when you plot multiple terms with newGsea plot, defalut is TRUE.}
 
 \item{pFill}{the pvalue table fill color when you plot multiple terms with newGsea plot, defalut is transparent.}
+
+\item{base_size}{the plot theme font size, defalut is 12.}
 }
 \value{
 ggplot2 object

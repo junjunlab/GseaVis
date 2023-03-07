@@ -60,6 +60,7 @@
 #' @param rank.gene.nudgey the gene label nudge y on rank plot, defalut is 2.
 #' @param rm.newGsea.ticks whether remove right axis when you plot multiple terms with newGsea plot, defalut is TRUE.
 #' @param pFill the pvalue table fill color when you plot multiple terms with newGsea plot, defalut is transparent.
+#' @param base_size the plot theme font size, defalut is 12.
 #'
 #' @importFrom ggplot2 aes_
 #' @import DOSE
@@ -87,6 +88,7 @@ gseaNb <- function(object = NULL,
                    filePath = NULL,
                    subPlot = 3,
                    lineSize = 1,
+                   base_size = 12,
                    geneSetID = NULL,
                    rmSegment = FALSE,
                    termWidth = 40,
@@ -302,7 +304,7 @@ gseaNb <- function(object = NULL,
                          lty = "dashed") +
     # ggplot2::geom_line(size = lineSize) +
     # geom_segment(data = gsdata1,aes(xend = x,yend = 0)) +
-    ggplot2::theme_bw(base_size = 14) +
+    ggplot2::theme_bw(base_size = base_size) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::theme(legend.position = legend.position,
                    legend.box.background = ggplot2::element_blank(),
@@ -356,7 +358,7 @@ gseaNb <- function(object = NULL,
                         color = "black",
                         lty = "dashed") +
     ggplot2::geom_segment(data = gsdata1, ggplot2::aes_(xend = ~x, yend = 0)) +
-    ggplot2::theme_bw(base_size = 14) +
+    ggplot2::theme_bw(base_size = base_size) +
     gseaNewCol +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::theme(legend.position = "none",
