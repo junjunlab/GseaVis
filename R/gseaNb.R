@@ -61,6 +61,7 @@
 #' @param rm.newGsea.ticks whether remove right axis when you plot multiple terms with newGsea plot, defalut is TRUE.
 #' @param pFill the pvalue table fill color when you plot multiple terms with newGsea plot, defalut is transparent.
 #' @param base_size the plot theme font size, defalut is 12.
+#' @param ncol the columns for newGSEA plot with multiple terms, defalut is 1
 #'
 #' @importFrom ggplot2 aes_
 #' @import DOSE
@@ -108,7 +109,8 @@ gseaNb <- function(object = NULL,
                    max.overlaps = 50,
                    geneSize = 4,
                    newGsea = FALSE,
-                   addPoint = TRUE,
+                   addPoint = FALSE,
+                   ncol = 1,
                    newCurveCol = c("#336699", "grey80", "#993399"),
                    newHtCol = c("#993399", "white", "#336699"),
                    rm.newGsea.ticks = TRUE,
@@ -380,7 +382,7 @@ gseaNb <- function(object = NULL,
   if(length(geneSetID) > 1){
     pnew <- pnew +
       ggplot2::facet_wrap(~id,
-                          ncol = 1,
+                          ncol = ncol,
                           scales = "free_y",
                           strip.position = "left",
                           labeller = ggplot2::labeller(id = facet.label)) +

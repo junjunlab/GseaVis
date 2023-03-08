@@ -116,6 +116,8 @@ outputs or "readGseaFile" object, defalut is NULL.}
 \item{pFill}{the pvalue table fill color when you plot multiple terms with newGsea plot, defalut is transparent.}
 
 \item{base_size}{the plot theme font size, defalut is 12.}
+
+\item{ncol}{the columns for newGSEA plot with multiple terms, defalut is 1}
 }
 \value{
 ggplot2 object
