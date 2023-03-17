@@ -54,11 +54,27 @@ dotplotGsea <- function(data = NULL,
   df$GeneRatio <- Count/df$setSize
 
   # filter top n
-  if(!is.null(topn)){
-    df <- df %>%
-      dplyr::group_by(type) %>%
-      dplyr::arrange(dplyr::desc(.data[[order.by]])) %>%
-      dplyr::slice_head(n = topn)
+  if(order.by == "NES"){
+    if(!is.null(topn)){
+      df.up <- df %>%
+        dplyr::filter(type == "activated") %>%
+        dplyr::arrange(dplyr::desc(.data[[order.by]])) %>%
+        dplyr::slice_head(n = topn)
+
+      df.down <- df %>%
+        dplyr::filter(type == "suppressed") %>%
+        dplyr::arrange(.data[[order.by]]) %>%
+        dplyr::slice_head(n = topn)
+
+      df <- rbind(df.up,df.down)
+    }
+  }else{
+    if(!is.null(topn)){
+      df <- df %>%
+        dplyr::group_by(type) %>%
+        dplyr::arrange(dplyr::desc(.data[[order.by]])) %>%
+        dplyr::slice_head(n = topn)
+    }
   }
 
   # wrap term name
