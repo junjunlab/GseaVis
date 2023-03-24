@@ -20,7 +20,7 @@ devtools::install_github("junjunlab/GseaVis")
 
 ## Citation
 
-> Jun Z (2022). *GseaVis: An Implement R Package to Visualize GSEA Results.*  https://github.com/junjunlab/GseaVis, https://github.com/junjunlab/GseaVis/wiki
+> Jun Zhang (2022). *GseaVis: An Implement R Package to Visualize GSEA Results.*  https://github.com/junjunlab/GseaVis, https://github.com/junjunlab/GseaVis/wiki
 
 ## Examples
 
