@@ -26,6 +26,13 @@ readGseaFile <- function(filePath = NULL){
   purrr::map_df(enrich.report,function(x){
     tmp <- suppressMessages(readr::read_tsv(x,show_col_types = FALSE))
     tmp <- tmp[,c(-3,-12)]
+
+    # check data
+    if(nrow(tmp) > 0){
+      return(tmp)
+    }else{
+      return(NULL)
+    }
   }) -> enrich.meta
 
   colnames(enrich.meta) <- c("ID","Description","setSize","enrichmentScore","NES",
