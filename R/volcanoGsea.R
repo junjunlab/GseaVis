@@ -53,12 +53,16 @@ volcanoGsea <- function(data = NULL,
       dplyr::slice_head(n = topN)
 
     # add nudge_y
-    if(x == 'sig-Activated'){
-      tmp$nudgey <- nudge.y[1]
+    if(nrow(tmp) == 0){
+      return(NULL)
     }else{
-      tmp$nudgey <- nudge.y[2]
+      if(x == 'sig-Activated'){
+        tmp$nudgey <- nudge.y[1]
+      }else{
+        tmp$nudgey <- nudge.y[2]
+      }
+      return(tmp)
     }
-    return(tmp)
   })
 
   # plot
