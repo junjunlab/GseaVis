@@ -84,7 +84,7 @@ readGseaFile <- function(filePath = NULL){
                             full.names = T)
 
   genelist <- utils::read.table(enrich.gene,sep = "\t",header = TRUE)
-  glist <- genelist$SCORE
+  glist <- as.numeric(genelist$SCORE)
   names(glist) <- genelist$NAME
 
   # prepare geneSets
