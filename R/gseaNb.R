@@ -548,7 +548,7 @@ gseaNb <- function(object = NULL,
         # round(data_ga$pvalue, digits = pDigit),
         ifelse(data_ga$pvalue < 0.001,"< 0.001",round(data_ga$pvalue, digits = pDigit)),
         "\n",
-        "Ajusted Pvalue: ",
+        "Adjusted Pvalue: ",
         # round(data_ga$p.adjust, digits = pDigit),
         ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)),
         sep = " "
@@ -574,7 +574,7 @@ gseaNb <- function(object = NULL,
           # round(data_ga$pvalue, digits = pDigit),
           ifelse(tmp$pvalue < 0.001,"< 0.001",round(tmp$pvalue, digits = pDigit)),
           "\n",
-          "Ajusted Pvalue: ",
+          "Adjusted Pvalue: ",
           # round(data_ga$p.adjust, digits = pDigit),
           ifelse(tmp$p.adjust < 0.001,"< 0.001",round(tmp$p.adjust, digits = pDigit)),
           sep = " "
@@ -613,7 +613,7 @@ gseaNb <- function(object = NULL,
         mytable <- tibble::tibble(x = px, y = py,
                                   table = list(tibble::tibble('NES' = round(data_ga$NES, digits = nesDigit),
                                                               'Pvalue' = ifelse(data_ga$pvalue < 0.001,"< 0.001",round(data_ga$pvalue, digits = pDigit)),
-                                                              'Ajusted Pvalue' = ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)))))
+                                                              'Adjusted Pvalue' = ifelse(data_ga$p.adjust < 0.001,"< 0.001",round(data_ga$p.adjust, digits = pDigit)))))
 
 
         pLabelOut <- plabel +
