@@ -66,7 +66,7 @@
 #' @importFrom ggplot2 aes_
 #' @import DOSE
 #' @import RColorBrewer
-#' @import ggpp
+#' @importFrom ggpp geom_table
 #' @return ggplot2 object
 #' @export
 #'
