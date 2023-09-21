@@ -30,6 +30,7 @@ globalVariables(c("val","label","hjust"))
 #' @param legend.position The position of the legend in the plot. Default is (0.85, 0.85).
 #' @param rect.bm.label Labels for the bottom rectangle, specifying "Up regulated"
 #' and "Down regulated". Default labels are provided.
+#' @param breaks.n The number of X axis breaks. Default is 6.
 #'
 #' @return Returns a multi-panel plot for GSEA results.
 #'
@@ -72,7 +73,8 @@ GSEAmultiGP <- function(gsea_list = NULL,
                         rect.bm.col = c("#CC3333","white","#003366"),
                         subplot.heights = c(0.4,0.2,0.08),
                         legend.position = c(0.85,0.85),
-                        rect.bm.label = c("Up regulated","Down regulated")){
+                        rect.bm.label = c("Up regulated","Down regulated"),
+                        breaks.n = 6){
   # ============================================================================
   # data process
   # ============================================================================
@@ -150,8 +152,8 @@ GSEAmultiGP <- function(gsea_list = NULL,
                         lty = "dashed") +
     ggplot2::theme_bw(base_size = base_size) +
     ggplot2::scale_x_continuous(expand = c(0, 0),limits = c(0,max(gsdata$x)),
-                                breaks = seq(0,max(gsdata$x),length.out = 8),
-                                labels = seq(0,max(gsdata$x),length.out = 8)) +
+                                breaks = seq(0,max(gsdata$x),length.out = breaks.n),
+                                labels = seq(0,max(gsdata$x),length.out = breaks.n)) +
     ggplot2::theme(legend.position = legend.position,
                    legend.box.background = ggplot2::element_blank(),
                    legend.text = ggplot2::element_text(hjust = 0.5,face = "bold.italic"),

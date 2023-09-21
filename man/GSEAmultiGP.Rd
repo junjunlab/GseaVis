@@ -20,7 +20,8 @@ GSEAmultiGP(
   rect.bm.col = c("#CC3333", "white", "#003366"),
   subplot.heights = c(0.4, 0.2, 0.08),
   legend.position = c(0.85, 0.85),
-  rect.bm.label = c("Up regulated", "Down regulated")
+  rect.bm.label = c("Up regulated", "Down regulated"),
+  breaks.n = 6
 )
 }
 \arguments{
@@ -63,6 +64,8 @@ values c(0.4,0.2,0.08) are provided.}
 
 \item{rect.bm.label}{Labels for the bottom rectangle, specifying "Up regulated"
 and "Down regulated". Default labels are provided.}
+
+\item{breaks.n}{The number of X axis breaks. Default is 6.}
 }
 \value{
 Returns a multi-panel plot for GSEA results.
