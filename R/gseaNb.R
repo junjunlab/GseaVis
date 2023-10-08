@@ -714,9 +714,9 @@ gseaNb <- function(object = NULL,
   #                 xmax = xmax,
   #                 col = color[unique(inv)])
 
-  d <- purrr::map_df(unique(gsdata$Description),function(setid){
+  d <- purrr::map_df(unique(gsdata$id),function(setid){
     tmp <- gsdata %>%
-      dplyr::filter(Description == setid)
+      dplyr::filter(id == setid)
 
     v <- seq(1, sum(tmp$position), length.out = 9)
     inv <- findInterval(rev(cumsum(tmp$position)), v)
@@ -737,8 +737,15 @@ gseaNb <- function(object = NULL,
                     xmin = xmin,
                     xmax = xmax,
                     col = color[unique(inv)],
-                    Description = setid)
+                    id = setid)
   })
+
+  # order
+  if(gsdata$id[1] == gsdata$Description[1]){
+    d$id <- factor(d$id,levels = geneSetID)
+  }else{
+    d$id <- factor(d$id,levels = data_ga$ID)
+  }
 
   pseg_ht <-
     pseg + ggplot2::geom_rect(
