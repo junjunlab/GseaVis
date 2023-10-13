@@ -13,6 +13,7 @@ globalVariables(c("val","label","hjust"))
 #' and p-value labels to the plot. Default is FALSE.
 #' @param curve.col A vector of colors for the curves representing different
 #' experiments. If NULL, random colors are assigned.
+#' @param curve.linewidth The curve linewidth. Default is 1.
 #' @param kegg Logical, indicating whether the gene set is a KEGG pathway.
 #' Default is FALSE.
 #' @param lineSize The size of the lines in the enrichment score curve plot.
@@ -65,6 +66,7 @@ GSEAmultiGP <- function(gsea_list = NULL,
                         exp_name = NULL,
                         addPval = FALSE,
                         curve.col = NULL,
+                        curve.linewidth = 1,
                         kegg = FALSE,
                         lineSize = 1,
                         base_size = 12,
@@ -144,7 +146,7 @@ GSEAmultiGP <- function(gsea_list = NULL,
   # curve plot
   pcurve <-
     ggplot2::ggplot(gsdata,ggplot2::aes_(x = ~x, y = ~runningScore)) +
-    ggplot2::geom_line(ggplot2::aes(color = id)) +
+    ggplot2::geom_line(ggplot2::aes(color = id),linewidth = curve.linewidth) +
     ggplot2::scale_color_manual(values = line.col,name = "") +
     ggplot2::geom_hline(yintercept = 0,
                         size = lineSize,

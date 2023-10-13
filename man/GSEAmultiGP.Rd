@@ -10,6 +10,7 @@ GSEAmultiGP(
   exp_name = NULL,
   addPval = FALSE,
   curve.col = NULL,
+  curve.linewidth = 1,
   kegg = FALSE,
   lineSize = 1,
   base_size = 12,
@@ -36,6 +37,8 @@ and p-value labels to the plot. Default is FALSE.}
 
 \item{curve.col}{A vector of colors for the curves representing different
 experiments. If NULL, random colors are assigned.}
+
+\item{curve.linewidth}{The curve linewidth. Default is 1.}
 
 \item{kegg}{Logical, indicating whether the gene set is a KEGG pathway.
 Default is FALSE.}
