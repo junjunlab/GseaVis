@@ -859,9 +859,9 @@ gseaNb <- function(object = NULL,
 
   ###########################################
   # new color
-  d <- purrr::map_df(unique(d$Description),function(x){
+  d <- purrr::map_df(unique(d$id),function(x){
     tmp <- d %>%
-      dplyr::filter(Description == x)
+      dplyr::filter(id == x)
 
     # add color
     htcolor <- grDevices::colorRampPalette(newHtCol)(nrow(tmp))

@@ -63,8 +63,11 @@ readGseaFile <- function(filePath = NULL){
       # tmp <- tmp[,c(-3,-8)]
       tmp <- cbind(tmp[,c(1:2)],tmp[,c("RANK IN GENE LIST","RANK METRIC SCORE",
                                        "RUNNING ES","CORE ENRICHMENT","Description","id")])
+      tmp$`RANK METRIC SCORE` <- as.character(tmp$`RANK METRIC SCORE`)
+
+      return(tmp)
     }
-    # return(tmp)
+
   }) -> enrich.rank
 
   colnames(enrich.rank)[1:6] <- c("name","symbol","rank","metricScore","runningScore",
@@ -96,6 +99,7 @@ readGseaFile <- function(filePath = NULL){
                             full.names = T)
 
   genelist <- utils::read.table(enrich.gene,sep = "\t",header = TRUE)
+  genelist <- genelist %>% dplyr::mutate(genelist,SCORE = ifelse(SCORE %in% c("Inf","-Inf"),0,SCORE))
   glist <- as.numeric(genelist$SCORE)
   names(glist) <- genelist$NAME
 
