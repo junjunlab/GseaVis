@@ -23,7 +23,19 @@ readGseaFile <- function(filePath = NULL){
   suffix <- suffix[length(suffix)]
 
   # read to table
-  purrr::map_df(enrich.report,function(x){
+  # purrr::map_df(enrich.report,function(x){
+  #   tmp <- suppressMessages(readr::read_tsv(x,show_col_types = FALSE))
+  #   tmp <- tmp[,c(-3,-12)]
+  #
+  #   # check data
+  #   if(nrow(tmp) > 0){
+  #     return(tmp)
+  #   }else{
+  #     return(NULL)
+  #   }
+  # }) -> enrich.meta
+
+  lapply(enrich.report,function(x){
     tmp <- suppressMessages(readr::read_tsv(x,show_col_types = FALSE))
     tmp <- tmp[,c(-3,-12)]
 
@@ -33,7 +45,7 @@ readGseaFile <- function(filePath = NULL){
     }else{
       return(NULL)
     }
-  }) -> enrich.meta
+  }) %>% Reduce("rbind",.) -> enrich.meta
 
   colnames(enrich.meta) <- c("ID","Description","setSize","enrichmentScore","NES",
                              "pvalue","p.adjust","qvalue","rank","leading_edge")
