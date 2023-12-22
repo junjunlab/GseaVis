@@ -1,6 +1,6 @@
 Package: GseaVis
 Title: Implement for 'GSEA' Enrichment Visualization
-Version: 0.0.9
+Version: 0.1.0
 Maintainer: Jun Zhang <3219030654@stu.cpu.edu.cn>
 Authors@R: 
     c(
@@ -13,6 +13,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports: 
+    AnnotationDbi,
     aplot,
     circlize,
     clusterProfiler,
@@ -22,15 +23,19 @@ Imports:
     ggpp,
     ggrepel,
     ggsci,
+    GO.db,
     grDevices,
+    gson,
     magrittr,
+    methods,
     purrr,
     RColorBrewer,
     readr,
     reshape2,
     stringr,
     tibble,
-    utils
+    utils,
+    yulab.utils
 URL: https://github.com/junjunlab/GseaVis
 BugReports: https://github.com/junjunlab/GseaVis/issues
 Depends: 
