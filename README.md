@@ -1,4 +1,4 @@
-
+![image](https://github.com/junjunlab/GseaVis/assets/64965509/8996295c-7e24-4127-9a73-acb3d72d940d)
 # GseaVis <img src="man/gseaVis-logo.png" align="right" height="200" />
 
 <!-- badges: start -->
@@ -44,3 +44,4 @@ devtools::install_github("junjunlab/GseaVis")
 > - [**同学你又在画 GSEA?**](https://mp.weixin.qq.com/s?__biz=MzkyMTI1MTYxNA==&mid=2247507943&idx=1&sn=2dc950650892f93a53eb1ef9abab6555&chksm=c184e596f6f36c8073acb3b614897062249c9b51c3aff4657dc9156670a9ff7a99df78dc7787&token=495330596&lang=zh_CN#rd)
 > - [**GseaVis 一键对接 GSEA 软件结果并可视化**](https://mp.weixin.qq.com/s?__biz=MzkyMTI1MTYxNA==&mid=2247508126&idx=1&sn=99fb4220166f8865762a6c2eb495ebe4&chksm=c1849aeff6f313f98b412186a5139e72ebb147f1899c00e7919899be6849f604667d987a1090&token=1432898004&lang=zh_CN#rd)
 > - [**听说你想把多个样本的 GSEA 画在一起?**](https://mp.weixin.qq.com/s?__biz=MzkyMTI1MTYxNA==&mid=2247509949&idx=1&sn=712115d6aba5e45c19da2905308cfe3b&chksm=c1849dccf6f314da0d6af67f840410256c03d7bcefe5a576bc7babe46422bdf61c8cc44b81b2&token=353110902&lang=zh_CN#rd)
+> - [**听说你只有富集表格还想画 GSEA 图?**](https://mp.weixin.qq.com/s?__biz=MzkyMTI1MTYxNA==&mid=2247512646&idx=1&sn=d9241b243771dcb355c74fd1a7f9431c&chksm=c1848837f6f301216f9d4c06659f01814b54994b552b5f15d9df9c5b227f417288a7cd4061e6&token=1853819831&lang=zh_CN#rd)
