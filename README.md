@@ -1,4 +1,4 @@
-![image](https://github.com/junjunlab/GseaVis/assets/64965509/8996295c-7e24-4127-9a73-acb3d72d940d)
+
 # GseaVis <img src="man/gseaVis-logo.png" align="right" height="200" />
 
 <!-- badges: start -->
