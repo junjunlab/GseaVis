@@ -1,3 +1,4 @@
+#' @importFrom utils getFromNamespace
 prepare_KEGG <- getFromNamespace("prepare_KEGG","clusterProfiler")
 get_GO_data <- getFromNamespace("get_GO_data","clusterProfiler")
 getGeneSet <- getFromNamespace("getGeneSet","DOSE")
