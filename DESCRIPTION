@@ -11,17 +11,19 @@ Description: Mark your interesting genes on plot and support more parameters to 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports: 
     AnnotationDbi,
     aplot,
     circlize,
     clusterProfiler,
+    cols4all,
     DOSE,
     dplyr,
     ggplot2,
     ggpp,
     ggrepel,
+    ggsankey,
     ggsci,
     GO.db,
     grDevices,
@@ -34,6 +36,7 @@ Imports:
     reshape2,
     stringr,
     tibble,
+    tidyr,
     utils,
     yulab.utils
 URL: https://github.com/junjunlab/GseaVis
