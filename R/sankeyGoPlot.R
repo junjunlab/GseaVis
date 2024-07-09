@@ -8,7 +8,7 @@ globalVariables(c("gene_ratio", 'next_node', "next_x", "node", "term_ratio"))
 #' @param nodeSize node text size for sankey plot, default 2.5.
 #' @param nodeColor node fill color for sankey plot, default NULL.
 #' @param goCol go color for go plot, default NULL.
-#' @param xShift the shift on horizontal for go plot, default 0.1.
+#' @param xShift the shift on horizontal for go plot, default 0.05.
 #' @param downShift the shift on vertical for go plot, default 4.5.
 #' @param upShift the shift on vertical for go plot, default 0.25.
 #'
@@ -25,7 +25,7 @@ sankeyGoPlot <- function(goData = NULL,
                          nodeSize = 2.5,
                          nodeColor = NULL,
                          goCol = NULL,
-                         xShift = 0.1,
+                         xShift = 0.05,
                          downShift = 4.5,
                          upShift = 0.25){
   # ============================================================================

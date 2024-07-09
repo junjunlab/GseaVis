@@ -11,7 +11,7 @@ sankeyGoPlot(
   nodeSize = 2.5,
   nodeColor = NULL,
   goCol = NULL,
-  xShift = 0.1,
+  xShift = 0.05,
   downShift = 4.5,
   upShift = 0.25
 )
@@ -29,7 +29,7 @@ sankeyGoPlot(
 
 \item{goCol}{go color for go plot, default NULL.}
 
-\item{xShift}{the shift on horizontal for go plot, default 0.1.}
+\item{xShift}{the shift on horizontal for go plot, default 0.05.}
 
 \item{downShift}{the shift on vertical for go plot, default 4.5.}
 
