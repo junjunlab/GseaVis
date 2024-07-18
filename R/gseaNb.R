@@ -51,7 +51,8 @@
 #' @param exp.col the expression colors, defalut is c('blue','white','red').
 #' @param ht.legend whether show the heatmap legend, defalut is TRUE.
 #' @param ght.relHight the relative height to the main plot, defalut is 0.4.
-#' @param ght.geneText.size the gene lable text size, defalut is 6.
+#' @param ght.geneText.size the gene label text size, defalut is 6.
+#' @param ght.sampleText.size the sample label text size, defalut is 6.
 #' @param ght.facet whether facet expression heatmap, defalut is FALSE.
 #' @param ght.facet.scale the facet plot scale argumrnt, defalut is "free".
 #' @param termID.order the facet term ID orders, defalut is NULL.
@@ -956,6 +957,7 @@ gseaNb <- function(object = NULL,
       ggplot2::scale_fill_gradient2(low = exp.col[1],mid = exp.col[2],high = exp.col[3],
                                     midpoint = 0,name = 'Z-Score') +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,vjust = 0.5,hjust = 1,size = ght.geneText.size),
+                     axis.text.y = ggplot2::element_text(size = ght.sampleText.size),
                      axis.text = ggplot2::element_text(color = "black"),
                      axis.ticks.x = ggplot2::element_blank(),
                      panel.grid = ggplot2::element_blank(),

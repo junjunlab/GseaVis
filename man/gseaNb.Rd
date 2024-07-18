@@ -99,7 +99,9 @@ outputs or "readGseaFile" object, defalut is NULL.}
 
 \item{ght.relHight}{the relative height to the main plot, defalut is 0.4.}
 
-\item{ght.geneText.size}{the gene lable text size, defalut is 6.}
+\item{ght.geneText.size}{the gene label text size, defalut is 6.}
+
+\item{ght.sampleText.size}{the sample label text size, defalut is 6.}
 
 \item{ght.facet}{whether facet expression heatmap, defalut is FALSE.}
 
