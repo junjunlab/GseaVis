@@ -2,6 +2,7 @@
 
 export("%>%")
 export(GSEAmultiGP)
+export(circGsea)
 export(dfGO2gseaResult)
 export(dfKEGG2gseaResult)
 export(dotplotGsea)
