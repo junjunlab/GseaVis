@@ -140,6 +140,8 @@ circGsea <- function(object = NULL,
                    plabel <- "< 0.01"
                  }else if(pval < 0.001){
                    plabel <- "< 0.001"
+                 }else{
+                   plabel <- round(pval,digits = 2)
                  }
 
                  goName <- paste(CELL_META$sector.index,"\n",
