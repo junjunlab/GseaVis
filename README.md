@@ -26,9 +26,9 @@ devtools::install_github("junjunlab/GseaVis")
 
 ![image](https://user-images.githubusercontent.com/64965509/198213474-43775942-1a40-4603-b1f8-2c2b0f2778e7.png)
 
-## More examples refer to
+## Documentation
 
-> **https://github.com/junjunlab/GseaVis/wiki**
+**https://junjunlab.github.io/gseavis-manual/**
 
 ## Related blogs
 
