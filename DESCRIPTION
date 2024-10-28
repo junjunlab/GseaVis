@@ -23,6 +23,7 @@ Imports:
     ggplot2,
     ggpp,
     ggrepel,
+    ggridges,
     ggsankey,
     ggsci,
     GO.db,
