@@ -4,6 +4,7 @@ globalVariables(c("gene_ratio", 'next_node', "next_x", "node", "term_ratio"))
 #'
 #' @param goData GO data frame from Clusterprofiler.
 #' @param topGenes the top genes to be shown for each term, default 5.
+#' @param keep_all_gene Whether keep all genes, default "FALSE", `topGenes` will be useless if TRUE.
 #' @param sankeyExpand the sankey plot expand for left and side, default c(0.5,1).
 #' @param nodeSize node text size for sankey plot, default 2.5.
 #' @param nodeColor node fill color for sankey plot, default NULL.
@@ -21,6 +22,7 @@ globalVariables(c("gene_ratio", 'next_node', "next_x", "node", "term_ratio"))
 #' @export
 sankeyGoPlot <- function(goData = NULL,
                          topGenes = 5,
+                         keep_all_gene = FALSE,
                          sankeyExpand = c(0.5,1),
                          nodeSize = 2.5,
                          nodeColor = NULL,
@@ -48,10 +50,14 @@ sankeyGoPlot <- function(goData = NULL,
   sankey_df <- ego_df %>%
     dplyr::select(Description,geneID) %>%
     tidyr::separate_longer_delim(geneID,delim = "/") %>%
-    dplyr::group_by(Description) %>%
-    dplyr::slice_head(n = topGenes) %>%
     as.data.frame() %>%
     dplyr::mutate(Description = as.character(Description))
+
+  if(keep_all_gene == FALSE){
+    sankey_df <- sankey_df %>%
+      dplyr::group_by(Description) %>%
+      dplyr::slice_head(n = topGenes)
+  }
 
   sankey_df_long <- sankey_df %>% ggsankey::make_long(geneID,Description)
 

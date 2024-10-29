@@ -7,6 +7,7 @@
 sankeyGoPlot(
   goData = NULL,
   topGenes = 5,
+  keep_all_gene = FALSE,
   sankeyExpand = c(0.5, 1),
   nodeSize = 2.5,
   nodeColor = NULL,
@@ -20,6 +21,8 @@ sankeyGoPlot(
 \item{goData}{GO data frame from Clusterprofiler.}
 
 \item{topGenes}{the top genes to be shown for each term, default 5.}
+
+\item{keep_all_gene}{Whether keep all genes, default "FALSE", \code{topGenes} will be useless if TRUE.}
 
 \item{sankeyExpand}{the sankey plot expand for left and side, default c(0.5,1).}
 
