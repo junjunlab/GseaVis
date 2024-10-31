@@ -56,7 +56,8 @@ sankeyGoPlot <- function(goData = NULL,
   if(keep_all_gene == FALSE){
     sankey_df <- sankey_df %>%
       dplyr::group_by(Description) %>%
-      dplyr::slice_head(n = topGenes)
+      dplyr::slice_head(n = topGenes) %>%
+      dplyr::ungroup()
   }
 
   sankey_df_long <- sankey_df %>% ggsankey::make_long(geneID,Description)
