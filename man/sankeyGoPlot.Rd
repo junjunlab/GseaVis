@@ -9,12 +9,15 @@ sankeyGoPlot(
   topGenes = 5,
   keep_all_gene = FALSE,
   sankeyExpand = c(0.5, 1),
+  flow_fill = "grey",
   nodeSize = 2.5,
   nodeColor = NULL,
   goCol = NULL,
   xShift = 0.05,
   downShift = 4.5,
-  upShift = 0.25
+  upShift = 0.25,
+  geom_layer = NULL,
+  enrich_type = c("go", "gsea")
 )
 }
 \arguments{
@@ -25,6 +28,8 @@ sankeyGoPlot(
 \item{keep_all_gene}{Whether keep all genes, default "FALSE", \code{topGenes} will be useless if TRUE.}
 
 \item{sankeyExpand}{the sankey plot expand for left and side, default c(0.5,1).}
+
+\item{flow_fill}{The flow fill color, default \code{grey}.}
 
 \item{nodeSize}{node text size for sankey plot, default 2.5.}
 
@@ -37,6 +42,10 @@ sankeyGoPlot(
 \item{downShift}{the shift on vertical for go plot, default 4.5.}
 
 \item{upShift}{the shift on vertical for go plot, default 0.25.}
+
+\item{geom_layer}{Custom geom_layers, default NULL.}
+
+\item{enrich_type}{The enrichment type, "go" or "gsea".}
 }
 \value{
 ggplot obeject
