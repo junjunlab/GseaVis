@@ -92,7 +92,7 @@ dfGO2gseaResult <- function(enrich.df = NULL,
 #' @param eps A small value to avoid division by zero (default is 1e-10).
 #' @param pAdjustMethod The p-value adjustment method (default is "BH" for Benjamini-Hochberg).
 #' @param exponent The exponent for weighting p-values (default is 1).
-#' @param minGSSize The minimum gene set size (default is 10).
+#' @param minGSSize The minimum gene set size (default is 120).
 #' @param maxGSSize The maximum gene set size (default is 500).
 #'
 #' @return A gseaResult object containing the results of KEGG enrichment analysis.
@@ -108,7 +108,7 @@ dfKEGG2gseaResult <- function(enrich.df = NULL,
                               eps = 1e-10,
                               pAdjustMethod = "BH",
                               exponent = 1,
-                              minGSSize = 10,
+                              minGSSize = 120,
                               maxGSSize = 500){
 
   # check geneList

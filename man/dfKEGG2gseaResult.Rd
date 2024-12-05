@@ -15,7 +15,7 @@ dfKEGG2gseaResult(
   eps = 1e-10,
   pAdjustMethod = "BH",
   exponent = 1,
-  minGSSize = 10,
+  minGSSize = 120,
   maxGSSize = 500
 )
 }
@@ -40,7 +40,7 @@ dfKEGG2gseaResult(
 
 \item{exponent}{The exponent for weighting p-values (default is 1).}
 
-\item{minGSSize}{The minimum gene set size (default is 10).}
+\item{minGSSize}{The minimum gene set size (default is 120).}
 
 \item{maxGSSize}{The maximum gene set size (default is 500).}
 }
