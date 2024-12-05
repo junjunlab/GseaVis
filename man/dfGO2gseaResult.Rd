@@ -14,7 +14,7 @@ dfGO2gseaResult(
   eps = 1e-10,
   pAdjustMethod = "BH",
   exponent = 1,
-  minGSSize = 120,
+  minGSSize = 10,
   maxGSSize = 500
 )
 }
@@ -38,7 +38,7 @@ dfGO2gseaResult(
 
 \item{exponent}{The exponent for weighting p-values (default is 1).}
 
-\item{minGSSize}{The minimum gene set size (default is 120).}
+\item{minGSSize}{The minimum gene set size (default is 10).}
 
 \item{maxGSSize}{The maximum gene set size (default is 500).}
 }
