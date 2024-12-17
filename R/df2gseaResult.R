@@ -8,6 +8,7 @@ globalVariables(c("SCORE"))
 #' @param enrich.df A data frame containing the results of enrichment analysis.
 #' @param geneList A decreasing sorted vector of gene list.
 #' @param OrgDb The organism-specific annotation database.
+#' @param own_termSet The own term-gene list if the enrichment analysis not rely on OrgDb package.
 #' @param keytype The type of gene identifier used in the analysis (default is "ENTREZID").
 #' @param setType The type of GO ontology to use ("BP" for Biological Process, "CC" for Cellular Component,
 #'                "MF" for Molecular Function, or "ALL" for all ontologies).
@@ -26,6 +27,7 @@ globalVariables(c("SCORE"))
 dfGO2gseaResult <- function(enrich.df = NULL,
                             geneList = NULL,
                             OrgDb = NULL,
+                            own_termSet = NULL,
                             keytype = "ENTREZID",
                             setType = c("BP","CC","MF","ALL"),
                             pvalueCutoff = 0.05,
@@ -42,8 +44,16 @@ dfGO2gseaResult <- function(enrich.df = NULL,
     stop("geneList should be a decreasing sorted vector...")
 
   # get genesets data
-  GO_DATA <- get_GO_data(OrgDb = OrgDb, ont = setType, keytype = keytype)
-  geneSets <- getGeneSet(GO_DATA)
+  if(is.null(own_termSet)){
+    GO_DATA <- get_GO_data(OrgDb = OrgDb, ont = setType, keytype = keytype)
+    geneSets <- getGeneSet(GO_DATA)
+
+    organism <- get_organism(OrgDb)
+  }else{
+    geneSets <- own_termSet
+    organism <- "own"
+  }
+
 
   if(keytype == 'SYMBOL'){
     readable <- TRUE
@@ -51,7 +61,7 @@ dfGO2gseaResult <- function(enrich.df = NULL,
     readable <- FALSE
   }
 
-  organism <- get_organism(OrgDb)
+
 
   # create gseaResult class
   gseaResult <- methods::new("gseaResult",

@@ -8,6 +8,7 @@ dfGO2gseaResult(
   enrich.df = NULL,
   geneList = NULL,
   OrgDb = NULL,
+  own_termSet = NULL,
   keytype = "ENTREZID",
   setType = c("BP", "CC", "MF", "ALL"),
   pvalueCutoff = 0.05,
@@ -24,6 +25,8 @@ dfGO2gseaResult(
 \item{geneList}{A decreasing sorted vector of gene list.}
 
 \item{OrgDb}{The organism-specific annotation database.}
+
+\item{own_termSet}{The own term-gene list if the enrichment analysis not rely on OrgDb package.}
 
 \item{keytype}{The type of gene identifier used in the analysis (default is "ENTREZID").}
 
