@@ -18,7 +18,7 @@
 #' @param arrowType arrow type, defalut is "closed".
 #' @param curveCol curve color, defalut is c("#76BA99", "#EB4747", "#996699").
 #' @param htCol heatmap color, defalut is c("#08519C", "#A50F15").
-#' @param rankCol gene rank fill color, defalut is c("#08519C", "white", "#A50F15").
+#' @param rankCol gene rank fill color, defalut is c("grey").
 #' @param rankSeq gene rank plot X axis breaks, defalt is 5000.
 #' @param htHeight the relative height when "subplot = 2" to the vertical line plot, defalut is 0.3.
 #' @param force the gene label force, refer to geom_text_repel function, defalut is 20.
@@ -63,6 +63,7 @@
 #' @param pFill the pvalue table fill color when you plot multiple terms with newGsea plot, defalut is transparent.
 #' @param base_size the plot theme font size, defalut is 12.
 #' @param ncol the columns for newGSEA plot with multiple terms, defalut is 1
+#' @param rm_ht whether remove classic middle heatmap plot, defalut is FALSE.
 #'
 #' @importFrom ggplot2 aes_
 #' @import DOSE
@@ -81,7 +82,7 @@
 #'       geneSetID = 'GOBP_NUCLEOSIDE_DIPHOSPHATE_METABOLIC_PROCESS',
 #'       subPlot = 2)
 
-globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes",
+globalVariables(c(".", "ID", "aes_", "gene_name","gseaRes", "Mean_LogFC", "fc", "pos",
                   "position","x","y","value","variable","logfc","nudge_y","vjust",
                   "pLabel","px","py","id"))
 
@@ -103,7 +104,7 @@ gseaNb <- function(object = NULL,
                    arrowType = "closed",
                    curveCol = c("#76BA99", "#EB4747","#996699"),
                    htCol = c("#08519C", "#A50F15"),
-                   rankCol = c("#08519C", "white", "#A50F15"),
+                   rankCol = c("grey"),
                    rankSeq = 5000,
                    htHeight = 0.3,
                    force = 20,
@@ -143,7 +144,8 @@ gseaNb <- function(object = NULL,
                    ght.facet.scale = "free",
                    termID.order = NULL,
                    rank.gene = NULL,
-                   rank.gene.nudgey = 2) {
+                   rank.gene.nudgey = 2,
+                   rm_ht = FALSE) {
   ##################################################################################
   # prepare data for plot
   ##################################################################################
@@ -696,70 +698,102 @@ gseaNb <- function(object = NULL,
   }
 
   ################################################
-  # v <- seq(1, sum(gsdata$position), length.out = 9)
-  # inv <- findInterval(rev(cumsum(gsdata$position)), v)
-  # if (min(inv) == 0) {
-  #   inv <- inv + 1
+
+  # d <- purrr::map_df(unique(gsdata$id),function(setid){
+  #   tmp <- gsdata %>%
+  #     dplyr::filter(id == setid)
+  #
+  #   v <- seq(1, sum(tmp$position), length.out = 9)
+  #   inv <- findInterval(rev(cumsum(tmp$position)), v)
+  #   if (min(inv) == 0) {
+  #     inv <- inv + 1
+  #   }
+  #
+  #   # col <- c(rev(brewer.pal(5, "Blues")), brewer.pal(5, "Reds"))
+  #   # new color
+  #   color <- grDevices::colorRampPalette(c(htCol[1], "white", htCol[2]))(10)
+  #
+  #   ymin <- 0
+  #   yy <- htHeight
+  #   xmin <- which(!duplicated(inv))
+  #   xmax <- xmin + as.numeric(table(inv)[as.character(unique(inv))])
+  #   d <- data.frame(ymin = ymin,
+  #                   ymax = yy,
+  #                   xmin = xmin,
+  #                   xmax = xmax,
+  #                   col = color[unique(inv)],
+  #                   id = setid)
+  # })
+  #
+  # # order
+  # if(gsdata$id[1] == gsdata$Description[1]){
+  #   d$id <- factor(d$id,levels = geneSetID)
+  # }else{
+  #   d$id <- factor(d$id,levels = data_ga$ID)
   # }
   #
-  # # col <- c(rev(brewer.pal(5, "Blues")), brewer.pal(5, "Reds"))
-  # # new color
-  # color <- grDevices::colorRampPalette(c(htCol[1], "white", htCol[2]))(10)
-  #
-  # ymin <- 0
-  # yy <- htHeight
-  # xmin <- which(!duplicated(inv))
-  # xmax <- xmin + as.numeric(table(inv)[as.character(unique(inv))])
-  # d <- data.frame(ymin = ymin,
-  #                 ymax = yy,
-  #                 xmin = xmin,
-  #                 xmax = xmax,
-  #                 col = color[unique(inv)])
+  # pseg_ht <-
+  #   pseg + ggplot2::geom_rect(
+  #     ggplot2::aes_(xmin = ~xmin,
+  #                   xmax = ~xmax,
+  #                   ymin = ~ymin,
+  #                   ymax = ~ymax,
+  #                   fill = ~ I(col)),
+  #     data = d,
+  #     alpha = 0.8,
+  #     inherit.aes = FALSE)
 
-  d <- purrr::map_df(unique(gsdata$id),function(setid){
-    tmp <- gsdata %>%
-      dplyr::filter(id == setid)
+  glist <- object@geneList
+  df <- data.frame(pos = 1:length(glist), fc = glist)
 
-    v <- seq(1, sum(tmp$position), length.out = 9)
-    inv <- findInterval(rev(cumsum(tmp$position)), v)
-    if (min(inv) == 0) {
-      inv <- inv + 1
-    }
+  break_intervals <- cut(df$fc, breaks = 10, include.lowest = TRUE)
 
-    # col <- c(rev(brewer.pal(5, "Blues")), brewer.pal(5, "Reds"))
-    # new color
-    color <- grDevices::colorRampPalette(c(htCol[1], "white", htCol[2]))(10)
+  intervals <- levels(break_intervals)
 
-    ymin <- 0
-    yy <- htHeight
-    xmin <- which(!duplicated(inv))
-    xmax <- xmin + as.numeric(table(inv)[as.character(unique(inv))])
-    d <- data.frame(ymin = ymin,
-                    ymax = yy,
-                    xmin = xmin,
-                    xmax = xmax,
-                    col = color[unique(inv)],
-                    id = setid)
+  interval_bounds <- data.frame(do.call(rbind, strsplit(gsub("[()\\[\\]]", "", intervals), ",")))
+  interval_bounds$X1 <- as.numeric(sapply(strsplit(interval_bounds$X1,split = "\\[|\\("),"[",2))
+  interval_bounds$X2 <- as.numeric(sapply(strsplit(interval_bounds$X2,split = "\\]|\\)"),"[",1))
+
+  start_positions <- sapply(interval_bounds[, 1], function(bound) which.min(abs(df$fc - bound)))
+  end_positions <- sapply(interval_bounds[, 2], function(bound) which.min(abs(df$fc - bound)))
+
+  interval_means <- tapply(df$fc, break_intervals, mean)
+
+  result_df <- data.frame(
+    Interval = 1:10,
+    Start = interval_bounds[, 1],
+    End = interval_bounds[, 2],
+    xmax = start_positions,
+    xmin = end_positions,
+    ymin = 0,
+    ymax = htHeight,
+    Mean_LogFC = interval_means
+  )
+
+  result_df <- purrr::map_df(unique(gsdata$id),function(setid){
+    result_df$id <- setid
+    return(result_df)
   })
 
   # order
   if(gsdata$id[1] == gsdata$Description[1]){
-    d$id <- factor(d$id,levels = geneSetID)
+    result_df$id <- factor(result_df$id,levels = geneSetID)
   }else{
-    d$id <- factor(d$id,levels = data_ga$ID)
+    result_df$id <- factor(result_df$id,levels = data_ga$ID)
   }
 
-  pseg_ht <-
-    pseg + ggplot2::geom_rect(
-      ggplot2::aes_(xmin = ~xmin,
-                    xmax = ~xmax,
-                    ymin = ~ymin,
-                    ymax = ~ymax,
-                    fill = ~ I(col)),
-      data = d,
-      alpha = 0.8,
-      inherit.aes = FALSE)
 
+  if(rm_ht == TRUE){
+    pseg_ht <- pseg
+  }else{
+    pseg_ht <-
+      pseg +
+      ggplot2::geom_rect(data = result_df,
+                         ggplot2::aes(xmin = xmin,xmax = xmax,ymin = ymin,ymax = ymax,
+                                      fill = Mean_LogFC),
+                         color = NA,inherit.aes = F,alpha = 0.8,show.legend = F) +
+      ggplot2::scale_fill_gradient2(low = htCol[1], mid = "white", high = htCol[2], midpoint = 0)
+  }
   ################################################
   # add gene rank
   pseg_ht1 <-
@@ -779,22 +813,18 @@ gseaNb <- function(object = NULL,
     prank.b = 0.2
   }
 
+  st <- data.frame(pos = 1,fc = 0)
+  ed <- data.frame(pos = nrow(df),fc = 0)
+
+  pg <- rbind(st,df)
+  pg <- rbind(pg,ed)
+
   # plot
   prank <-
-    ggplot2::ggplot(gsdata[which(gsdata$Description == unique(gsdata$Description)[1]),],
-                    ggplot2::aes_(x = ~x, y = ~geneList)) +
-    # geom_col(width = 1,fill = 'grey80',color = NA) +
-    ggplot2::geom_col(
-      ggplot2::aes_(fill = ~geneList),
-      width = 1,
-      color = NA,
-      show.legend = F) +
-    ggplot2::scale_fill_gradient2(low = rankCol[1],
-                                  mid = rankCol[2],
-                                  high = rankCol[3],
-                                  midpoint = 0) +
+    ggplot2::ggplot(pg) +
+    ggplot2::geom_polygon(ggplot2::aes(x = pos,y = fc),fill = rankCol) +
     ggplot2::geom_hline(yintercept = 0,
-                        size = 0.8,
+                        size = 0.5,
                         color = "black",
                         lty = "dashed") +
     ggplot2::scale_x_continuous(breaks = seq(0, nrow(gsdata), rankSeq)) +
@@ -808,6 +838,36 @@ gseaNb <- function(object = NULL,
     ggplot2::coord_cartesian(expand = 0) +
     ggplot2::ylab("Ranked List") +
     ggplot2::xlab("Rank in Ordered Dataset")
+
+  # # plot
+  # prank <-
+  #   ggplot2::ggplot(gsdata[which(gsdata$Description == unique(gsdata$Description)[1]),],
+  #                   ggplot2::aes_(x = ~x, y = ~geneList)) +
+  #   # geom_col(width = 1,fill = 'grey80',color = NA) +
+  #   ggplot2::geom_col(
+  #     ggplot2::aes_(fill = ~geneList),
+  #     width = 1,
+  #     color = NA,
+  #     show.legend = F) +
+  #   ggplot2::scale_fill_gradient2(low = rankCol[1],
+  #                                 mid = rankCol[2],
+  #                                 high = rankCol[3],
+  #                                 midpoint = 0) +
+  #   ggplot2::geom_hline(yintercept = 0,
+  #                       size = 0.8,
+  #                       color = "black",
+  #                       lty = "dashed") +
+  #   ggplot2::scale_x_continuous(breaks = seq(0, nrow(gsdata), rankSeq)) +
+  #   ggplot2::theme_bw(base_size = 14) +
+  #   ggplot2::theme(panel.grid = ggplot2::element_blank(),
+  #                  plot.margin = ggplot2::margin(t = -.1,
+  #                                                r = .2,
+  #                                                b = prank.b,
+  #                                                l = .2,
+  #                                                unit = "cm")) +
+  #   ggplot2::coord_cartesian(expand = 0) +
+  #   ggplot2::ylab("Ranked List") +
+  #   ggplot2::xlab("Rank in Ordered Dataset")
 
   if(add.geneExpHt == TRUE){
     prank <- prank +
@@ -860,28 +920,48 @@ gseaNb <- function(object = NULL,
   }
 
   ###########################################
-  # new color
-  d <- purrr::map_df(unique(d$id),function(x){
-    tmp <- d %>%
-      dplyr::filter(id == x)
+  # # new color
+  # d <- purrr::map_df(unique(d$id),function(x){
+  #   tmp <- d %>%
+  #     dplyr::filter(id == x)
+  #
+  #   # add color
+  #   htcolor <- grDevices::colorRampPalette(newHtCol)(nrow(tmp))
+  #
+  #   tmp <- tmp %>%
+  #     dplyr::mutate(htcol = htcolor)
+  # })
+  #
+  # # heatmap
+  # ht <- ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore)) +
+  #   ggplot2::geom_rect(ggplot2::aes_(xmin = ~xmin,
+  #                                    xmax = ~xmax,
+  #                                    ymin = ~ymin,
+  #                                    ymax = ~ymax,
+  #                                    fill = ~ I(htcol)),
+  #                      data = d,
+  #                      alpha = 0.8,
+  #                      inherit.aes = FALSE) +
+  #   ggplot2::scale_x_continuous(expand = c(0, 0)) +
+  #   ggplot2::scale_y_continuous(expand = c(0, 0)) +
+  #   ggplot2::theme_bw(base_size = 14) +
+  #   ggplot2::theme(panel.grid = ggplot2::element_blank(),
+  #                  axis.ticks = ggplot2::element_blank(),
+  #                  axis.text = ggplot2::element_blank(),
+  #                  axis.title = ggplot2::element_blank(),
+  #                  plot.margin = ggplot2::margin(t = 0,
+  #                                                r = .2,
+  #                                                b = .2,
+  #                                                l = .2,
+  #                                                unit = "cm"))
 
-    # add color
-    htcolor <- grDevices::colorRampPalette(newHtCol)(nrow(tmp))
-
-    tmp <- tmp %>%
-      dplyr::mutate(htcol = htcolor)
-  })
-
-  # heatmap
-  ht <- ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore)) +
-    ggplot2::geom_rect(ggplot2::aes_(xmin = ~xmin,
-                                     xmax = ~xmax,
-                                     ymin = ~ymin,
-                                     ymax = ~ymax,
-                                     fill = ~ I(htcol)),
-                       data = d,
-                       alpha = 0.8,
-                       inherit.aes = FALSE) +
+  ht <-
+  ggplot2::ggplot() +
+    ggplot2::geom_rect(data = result_df,
+                       ggplot2::aes(xmin = xmin,xmax = xmax,ymin = ymin,ymax = ymax,
+                                    fill = Mean_LogFC),
+                       color = NA,inherit.aes = F,alpha = 0.8,show.legend = F) +
+    ggplot2::scale_fill_gradient2(low = newHtCol[1], mid = newHtCol[2], high = newHtCol[3], midpoint = 0) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
     ggplot2::theme_bw(base_size = 14) +
@@ -894,7 +974,6 @@ gseaNb <- function(object = NULL,
                                                  b = .2,
                                                  l = .2,
                                                  unit = "cm"))
-
 
   # =========================================================
   # whether add gene expression heatmap

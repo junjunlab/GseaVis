@@ -37,7 +37,7 @@ outputs or "readGseaFile" object, defalut is NULL.}
 
 \item{htCol}{heatmap color, defalut is c("#08519C", "#A50F15").}
 
-\item{rankCol}{gene rank fill color, defalut is c("#08519C", "white", "#A50F15").}
+\item{rankCol}{gene rank fill color, defalut is c("grey").}
 
 \item{rankSeq}{gene rank plot X axis breaks, defalt is 5000.}
 
@@ -120,6 +120,8 @@ outputs or "readGseaFile" object, defalut is NULL.}
 \item{base_size}{the plot theme font size, defalut is 12.}
 
 \item{ncol}{the columns for newGSEA plot with multiple terms, defalut is 1}
+
+\item{rm_ht}{whether remove classic middle heatmap plot, defalut is FALSE.}
 }
 \value{
 ggplot2 object

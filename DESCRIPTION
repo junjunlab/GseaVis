@@ -1,6 +1,6 @@
 Package: GseaVis
 Title: Implement for 'GSEA' Enrichment Visualization
-Version: 0.1.0
+Version: 0.1.1
 Maintainer: Jun Zhang <3219030654@stu.cpu.edu.cn>
 Authors@R: 
     c(
