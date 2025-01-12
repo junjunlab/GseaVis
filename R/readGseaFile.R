@@ -103,6 +103,9 @@ readGseaFile <- function(filePath = NULL){
   glist <- as.numeric(genelist$SCORE)
   names(glist) <- genelist$NAME
 
+  # replace NA
+  glist[is.na(glist)] <- 0
+
   # prepare geneSets
   gset <- clusterProfiler::read.gmt(paste(filePath,"edb/gene_sets.gmt",sep = ""))
 
