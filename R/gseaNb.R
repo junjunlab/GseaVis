@@ -150,6 +150,8 @@ gseaNb <- function(object = NULL,
   # prepare data for plot
   ##################################################################################
   if(is.null(filePath)){
+    glist <- object@geneList
+
     gsdata <- purrr::map_df(geneSetID,function(setid){
       gsInfo(object,geneSetID = setid) %>%
         dplyr::mutate(id = setid)
@@ -194,6 +196,8 @@ gseaNb <- function(object = NULL,
     }else{
       gsea.res <- filePath
     }
+
+    glist <- gsea.res$glist
 
     # get rank data
     gsdata <- purrr::map_df(geneSetID,function(setid){
@@ -743,7 +747,7 @@ gseaNb <- function(object = NULL,
   #     alpha = 0.8,
   #     inherit.aes = FALSE)
 
-  glist <- object@geneList
+  # glist <- object@geneList
   df <- data.frame(pos = 1:length(glist), fc = glist)
 
   break_intervals <- cut(df$fc, breaks = 10, include.lowest = TRUE)
