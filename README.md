@@ -20,7 +20,7 @@ devtools::install_github("junjunlab/GseaVis")
 
 ## Citation
 
-> Jun Zhang (2022). *GseaVis: An Implement R Package to Visualize GSEA Results.*  https://github.com/junjunlab/GseaVis.
+> Jun Zhang, Hongyuan Li, Wenjun Tao, Jun Zhou. [GseaVis: An R Package for Enhanced Visualization of Gene Set Enrichment Analysis in Biomedicine](https://onlinelibrary.wiley.com/doi/full/10.1002/mdr2.70000). Med Research, 2025.
 
 ## Examples
 
