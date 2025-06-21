@@ -1,3 +1,5 @@
+globalVariables(c("xmax", "xmin", "ymax", "ymin"))
+
 #' @title gseaNb
 #' @name gseaNb
 #' @author Jun Zhang
