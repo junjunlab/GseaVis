@@ -318,6 +318,7 @@ gseaNb <- function(object = NULL,
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::theme(legend.position = legend.position,
                    legend.box.background = ggplot2::element_blank(),
+                   axis.text = element_text(colour = "black"),
                    plot.title = ggplot2::element_text(hjust = 0.5),
                    panel.grid = ggplot2::element_blank(),
                    axis.ticks.x = ggplot2::element_blank(),
@@ -372,6 +373,7 @@ gseaNb <- function(object = NULL,
     gseaNewCol +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::theme(legend.position = "none",
+                   axis.text = element_text(colour = "black"),
                    plot.title = ggplot2::element_text(hjust = 0.5),
                    axis.ticks.x = ggplot2::element_blank(),
                    axis.text.x = ggplot2::element_blank(),
@@ -834,6 +836,7 @@ gseaNb <- function(object = NULL,
     ggplot2::scale_x_continuous(breaks = seq(0, nrow(gsdata), rankSeq)) +
     ggplot2::theme_bw(base_size = 14) +
     ggplot2::theme(panel.grid = ggplot2::element_blank(),
+                   axis.text = element_text(colour = "black"),
                    plot.margin = ggplot2::margin(t = -.1,
                                                  r = .2,
                                                  b = prank.b,
