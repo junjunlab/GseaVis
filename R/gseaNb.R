@@ -23,6 +23,7 @@ globalVariables(c("xmax", "xmin", "ymax", "ymin"))
 #' @param rankCol gene rank fill color, defalut is c("grey").
 #' @param rankSeq gene rank plot X axis breaks, defalt is 5000.
 #' @param htHeight the relative height when "subplot = 2" to the vertical line plot, defalut is 0.3.
+#' @param htAlpha heatmap color alpha, defalut is 0.8.
 #' @param force the gene label force, refer to geom_text_repel function, defalut is 20.
 #' @param max.overlaps refer to geom_text_repel function, defalut is 50.
 #' @param geneSize gene label text size, defalut is 4.
@@ -66,6 +67,10 @@ globalVariables(c("xmax", "xmin", "ymax", "ymin"))
 #' @param base_size the plot theme font size, defalut is 12.
 #' @param ncol the columns for newGSEA plot with multiple terms, defalut is 1
 #' @param rm_ht whether remove classic middle heatmap plot, defalut is FALSE.
+#' @param subRatio Numeric vector of length 3 specifying relative heights of subplots.
+#'   Default is c(0.5, 0.2, 0.3).
+#' @param addZeroLine Logical indicating whether to add vertical line at zero enrichment.
+#'   Default is FALSE.
 #'
 #' @importFrom ggplot2 aes_
 #' @import DOSE
@@ -109,6 +114,7 @@ gseaNb <- function(object = NULL,
                    rankCol = c("grey"),
                    rankSeq = 5000,
                    htHeight = 0.3,
+                   htAlpha = 0.8,
                    force = 20,
                    max.overlaps = 50,
                    geneSize = 4,
@@ -147,7 +153,9 @@ gseaNb <- function(object = NULL,
                    termID.order = NULL,
                    rank.gene = NULL,
                    rank.gene.nudgey = 2,
-                   rm_ht = FALSE) {
+                   rm_ht = FALSE,
+                   subRatio = c(0.5, 0.2, 0.3),
+                   addZeroLine = F) {
   ##################################################################################
   # prepare data for plot
   ##################################################################################
@@ -335,6 +343,16 @@ gseaNb <- function(object = NULL,
                                                  unit = "cm")) +
     ggplot2::ylab("Running Enrichment Score") +
     ggplot2::ggtitle(niceTit)
+
+  # add zero line
+  if(addZeroLine == TRUE){
+    midx <- min(abs(gsdata$geneList))
+
+    ps <- subset(gsdata, geneList == midx)
+
+    pcurve <- pcurve+
+      geom_vline(xintercept = ps$x,linetype = "dashed",color = "black")
+  }
 
   ###########################################
   # calculate midpoint
@@ -802,13 +820,47 @@ gseaNb <- function(object = NULL,
   if(rm_ht == TRUE){
     pseg_ht <- pseg
   }else{
+    # pseg_ht <-
+    #   pseg +
+    #   ggplot2::geom_rect(data = result_df,
+    #                      ggplot2::aes(xmin = xmin,xmax = xmax,ymin = ymin,ymax = ymax,
+    #                                   fill = Mean_LogFC),
+    #                      color = NA,inherit.aes = F,alpha = htAlpha,show.legend = F) +
+    #   ggplot2::scale_fill_gradient2(low = htCol[1], mid = "white", high = htCol[2], midpoint = 0)
+
     pseg_ht <-
-      pseg +
+      ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore,color = ~id)) +
       ggplot2::geom_rect(data = result_df,
                          ggplot2::aes(xmin = xmin,xmax = xmax,ymin = ymin,ymax = ymax,
                                       fill = Mean_LogFC),
-                         color = NA,inherit.aes = F,alpha = 0.8,show.legend = F) +
-      ggplot2::scale_fill_gradient2(low = htCol[1], mid = "white", high = htCol[2], midpoint = 0)
+                         color = NA,inherit.aes = F,alpha = htAlpha,show.legend = F) +
+      ggplot2::scale_fill_gradient2(low = htCol[1], mid = "white", high = htCol[2], midpoint = 0) +
+      ggplot2::geom_segment(data = gsdata1,
+                            ggplot2::aes_(x = ~x,
+                                          xend = ~x,
+                                          y = 0,
+                                          yend = 1),
+                            # color = "black",
+                            show.legend = F) +
+      line.col +
+      ggplot2::scale_x_continuous(expand = c(0, 0)) +
+      ggplot2::scale_y_continuous(expand = c(0, 0)) +
+      ggplot2::theme_bw(base_size = 14) +
+      ggplot2::theme(axis.ticks = ggplot2::element_blank(),
+                     axis.text = ggplot2::element_blank(),
+                     axis.title.y = ggplot2::element_blank(),
+                     panel.grid = ggplot2::element_blank(),
+                     axis.line.x = ggplot2::element_blank(),
+                     strip.background = ggplot2::element_blank(),
+                     strip.text = ggplot2::element_blank(),
+                     panel.spacing = ggplot2::unit(0.1,'cm'),
+                     plot.margin = ggplot2::margin(t = 0,
+                                                   r = .2,
+                                                   b = pseg.b,
+                                                   l = .2,
+                                                   unit = "cm")) +
+      ggplot2::xlab("Rank in Ordered Dataset") +
+      ggplot2::facet_wrap(~id,ncol = 1)
   }
   ################################################
   # add gene rank
@@ -855,6 +907,15 @@ gseaNb <- function(object = NULL,
     ggplot2::coord_cartesian(expand = 0) +
     ggplot2::ylab("Ranked List") +
     ggplot2::xlab("Rank in Ordered Dataset")
+
+  if(addZeroLine == TRUE){
+    midx <- min(abs(gsdata$geneList))
+
+    ps <- subset(gsdata, geneList == midx)
+
+    prank <- prank+
+      geom_vline(xintercept = ps$x,linetype = "dashed",color = "black")
+  }
 
   # # plot
   # prank <-
@@ -973,11 +1034,11 @@ gseaNb <- function(object = NULL,
   #                                                unit = "cm"))
 
   ht <-
-  ggplot2::ggplot() +
+    ggplot2::ggplot() +
     ggplot2::geom_rect(data = result_df,
                        ggplot2::aes(xmin = xmin,xmax = xmax,ymin = ymin,ymax = ymax,
                                     fill = Mean_LogFC),
-                       color = NA,inherit.aes = F,alpha = 0.8,show.legend = F) +
+                       color = NA,inherit.aes = F,alpha = htAlpha,show.legend = F) +
     ggplot2::scale_fill_gradient2(low = newHtCol[1], mid = newHtCol[2], high = newHtCol[3], midpoint = 0) +
     ggplot2::scale_x_continuous(expand = c(0, 0)) +
     ggplot2::scale_y_continuous(expand = c(0, 0)) +
@@ -1114,14 +1175,14 @@ gseaNb <- function(object = NULL,
           aplot::plot_list(
             gglist = list(pLabelOut, pseg_ht1, prank),
             ncol = 1,
-            heights = c(0.5, 0.2, 0.3)
+            heights = subRatio
           )
       }else{
         pres <-
           aplot::plot_list(
             gglist = list(pLabelOut, pseg, prank),
             ncol = 1,
-            heights = c(0.5, 0.2, 0.3)
+            heights = subRatio
           )
       }
 
@@ -1157,6 +1218,7 @@ gseaNb <- function(object = NULL,
   # output
   return(pfinal)
 }
+
 
 
 #' This is a test data for this package

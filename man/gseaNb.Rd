@@ -43,6 +43,8 @@ outputs or "readGseaFile" object, defalut is NULL.}
 
 \item{htHeight}{the relative height when "subplot = 2" to the vertical line plot, defalut is 0.3.}
 
+\item{htAlpha}{heatmap color alpha, defalut is 0.8.}
+
 \item{force}{the gene label force, refer to geom_text_repel function, defalut is 20.}
 
 \item{max.overlaps}{refer to geom_text_repel function, defalut is 50.}
@@ -122,6 +124,12 @@ outputs or "readGseaFile" object, defalut is NULL.}
 \item{ncol}{the columns for newGSEA plot with multiple terms, defalut is 1}
 
 \item{rm_ht}{whether remove classic middle heatmap plot, defalut is FALSE.}
+
+\item{subRatio}{Numeric vector of length 3 specifying relative heights of subplots.
+Default is c(0.5, 0.2, 0.3).}
+
+\item{addZeroLine}{Logical indicating whether to add vertical line at zero enrichment.
+Default is FALSE.}
 }
 \value{
 ggplot2 object
