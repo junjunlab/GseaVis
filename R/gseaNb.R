@@ -754,6 +754,13 @@ gseaNb <- function(object = NULL,
   # glist <- object@geneList
   df <- data.frame(pos = 1:length(glist), fc = glist)
 
+  qt <- quantile(df$fc,probs = c(0.1,0.9))
+
+  df <- df %>%
+    dplyr::mutate(fc = dplyr::case_when(fc >= qt[2] ~ qt[2],
+                                        fc <= qt[1] ~ qt[1],
+                                        .default = fc))
+
   break_intervals <- cut(df$fc, breaks = 10, include.lowest = TRUE)
 
   intervals <- levels(break_intervals)
@@ -763,6 +770,7 @@ gseaNb <- function(object = NULL,
   interval_bounds$X2 <- as.numeric(sapply(strsplit(interval_bounds$X2,split = "\\]|\\)"),"[",1))
 
   start_positions <- sapply(interval_bounds[, 1], function(bound) which.min(abs(df$fc - bound)))
+  start_positions[1] <- nrow(df)
   end_positions <- sapply(interval_bounds[, 2], function(bound) which.min(abs(df$fc - bound)))
 
   interval_means <- tapply(df$fc, break_intervals, mean)
