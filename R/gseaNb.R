@@ -756,12 +756,12 @@ gseaNb <- function(object = NULL,
 
   qt <- quantile(df$fc,probs = c(0.1,0.9))
 
-  df <- df %>%
+  df2 <- df %>%
     dplyr::mutate(fc = dplyr::case_when(fc >= qt[2] ~ qt[2],
                                         fc <= qt[1] ~ qt[1],
                                         .default = fc))
 
-  break_intervals <- cut(df$fc, breaks = 10, include.lowest = TRUE)
+  break_intervals <- cut(df2$fc, breaks = 10, include.lowest = TRUE)
 
   intervals <- levels(break_intervals)
 
@@ -769,11 +769,11 @@ gseaNb <- function(object = NULL,
   interval_bounds$X1 <- as.numeric(sapply(strsplit(interval_bounds$X1,split = "\\[|\\("),"[",2))
   interval_bounds$X2 <- as.numeric(sapply(strsplit(interval_bounds$X2,split = "\\]|\\)"),"[",1))
 
-  start_positions <- sapply(interval_bounds[, 1], function(bound) which.min(abs(df$fc - bound)))
-  start_positions[1] <- nrow(df)
-  end_positions <- sapply(interval_bounds[, 2], function(bound) which.min(abs(df$fc - bound)))
+  start_positions <- sapply(interval_bounds[, 1], function(bound) which.min(abs(df2$fc - bound)))
+  start_positions[1] <- nrow(df2)
+  end_positions <- sapply(interval_bounds[, 2], function(bound) which.min(abs(df2$fc - bound)))
 
-  interval_means <- tapply(df$fc, break_intervals, mean)
+  interval_means <- tapply(df2$fc, break_intervals, mean)
 
   result_df <- data.frame(
     Interval = 1:10,
