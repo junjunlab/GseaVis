@@ -319,7 +319,7 @@ gseaNb <- function(object = NULL,
     line +
     line.col +
     ggplot2::geom_hline( yintercept = 0,
-                         size = lineSize,
+                         # size = lineSize,
                          color = "black",
                          lty = "dashed") +
     # ggplot2::geom_line(size = lineSize) +
@@ -385,7 +385,7 @@ gseaNb <- function(object = NULL,
                     ggplot2::aes_(x = ~x, y = ~runningScore, color = ~runningScore)) +
     ggplot2::geom_line(size = lineSize) +
     ggplot2::geom_hline(yintercept = 0,
-                        size = lineSize,
+                        # size = lineSize,
                         color = "black",
                         lty = "dashed") +
     ggplot2::geom_segment(data = gsdata1, ggplot2::aes_(xend = ~x, yend = 0)) +
