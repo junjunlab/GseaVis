@@ -350,8 +350,12 @@ gseaNb <- function(object = NULL,
 
     ps <- subset(gsdata, geneList == midx)
 
+    if(nrow(ps) > 1){
+      mpos <- floor((min(ps$x)+max(ps$x))/2)
+    }
+
     pcurve <- pcurve+
-      geom_vline(xintercept = ps$x,linetype = "dashed",color = "black")
+      geom_vline(xintercept = mpos,linetype = "dashed",color = "black")
   }
 
   ###########################################
@@ -913,8 +917,12 @@ gseaNb <- function(object = NULL,
 
     ps <- subset(gsdata, geneList == midx)
 
+    if(nrow(ps) > 1){
+      mpos <- floor((min(ps$x)+max(ps$x))/2)
+    }
+
     prank <- prank+
-      geom_vline(xintercept = ps$x,linetype = "dashed",color = "black")
+      geom_vline(xintercept = mpos,linetype = "dashed",color = "black")
   }
 
   # # plot
