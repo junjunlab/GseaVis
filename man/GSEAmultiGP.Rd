@@ -94,9 +94,6 @@ result <- GSEAmultiGP(gsea_list = gsea_results,
                       }
 
 }
-\seealso{
-\code{\link{gsInfo}}, \code{\link{ggplot2}}
-}
 \author{
 Jun Zhang
 }

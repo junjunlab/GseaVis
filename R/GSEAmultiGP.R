@@ -57,8 +57,6 @@ globalVariables(c("val","label","hjust"))
 #' @importFrom ggpp geom_table
 #' @import circlize
 #'
-#' @seealso
-#' \code{\link{gsInfo}}, \code{\link{ggplot2}}
 #'
 #' @export
 GSEAmultiGP <- function(gsea_list = NULL,

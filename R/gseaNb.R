@@ -1,4 +1,4 @@
-globalVariables(c("xmax", "xmin", "ymax", "ymin"))
+globalVariables(c("xmax", "xmin", "ymax", "ymin","geneList"))
 
 #' @title gseaNb
 #' @name gseaNb
@@ -76,6 +76,7 @@ globalVariables(c("xmax", "xmin", "ymax", "ymin"))
 #' @import DOSE
 #' @import RColorBrewer
 #' @importFrom ggpp geom_table
+#' @importFrom stats quantile
 #' @return ggplot2 object
 #' @export
 #'
@@ -778,7 +779,7 @@ gseaNb <- function(object = NULL,
   # glist <- object@geneList
   df <- data.frame(pos = 1:length(glist), fc = glist)
 
-  qt <- quantile(df$fc,probs = c(0.1,0.9))
+  qt <- stats::quantile(df$fc,probs = c(0.1,0.9))
 
   df2 <- df %>%
     dplyr::mutate(fc = dplyr::case_when(fc >= qt[2] ~ qt[2],
