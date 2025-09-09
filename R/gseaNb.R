@@ -352,6 +352,8 @@ gseaNb <- function(object = NULL,
 
     if(nrow(ps) > 1){
       mpos <- floor((min(ps$x)+max(ps$x))/2)
+    }else{
+      mpos <- ps$x
     }
 
     pcurve <- pcurve+
@@ -919,6 +921,8 @@ gseaNb <- function(object = NULL,
 
     if(nrow(ps) > 1){
       mpos <- floor((min(ps$x)+max(ps$x))/2)
+    }else{
+      mpos <- ps$x
     }
 
     prank <- prank+
