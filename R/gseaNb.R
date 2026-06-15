@@ -240,7 +240,7 @@ gseaNb <- function(object = NULL,
   ##################################################################################
   # nice title
   niceTit <- purrr::map_chr(unique(gsdata$Description),function(x){
-    tit <- unlist(strsplit(x, split = "_"))
+    tit <- unlist(strsplit(as.character(x), split = "_"))
 
     if(length(tit) == 1){
       niceTit <-

@@ -15,7 +15,7 @@ gsInfoNew <- function(geneList = NULL,
                       geneSetID = NULL,
                       geneSet = NULL,
                       exponent = 1) {
-  gseaScores <- utils::getFromNamespace("gseaScores", "DOSE")
+  gseaScores <- utils::getFromNamespace("gseaScores", "enrichit")
 
   # geneList <- object@geneList
   #
