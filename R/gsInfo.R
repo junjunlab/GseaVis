@@ -9,7 +9,7 @@
 
 # define function
 gsInfo <- function(object, geneSetID) {
-  gseaScores <- utils::getFromNamespace("gseaScores", "DOSE")
+  gseaScores <- utils::getFromNamespace("gseaScores", "enrichit")
 
   geneList <- object@geneList
 
