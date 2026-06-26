@@ -67,11 +67,11 @@ volcanoGsea <- function(data = NULL,
 
   # plot
   p <-
-    ggplot2::ggplot(df,ggplot2::aes_string(x = "logp",y = "NES")) +
-    ggplot2::geom_point(ggplot2::aes(color = type),alpha = 0.5,size = point.size) +
+    ggplot2::ggplot(df,ggplot2::aes(x = .data$logp, y = .data$NES)) +
+    ggplot2::geom_point(ggplot2::aes(color = .data$type), alpha = 0.5, size = point.size) +
     ggplot2::geom_vline(xintercept = -log10(ifelse(p.adjust.CUTOFF,p.adjust.CUTOFF,pvalue.cutoff)),
-                        size = 1,lty = 'solid',color = 'grey75') +
-    ggplot2::geom_hline(yintercept = c(-NES.cutoff,NES.cutoff),size = 1,lty = 'dashed',color = 'grey75') +
+                        linewidth = 1, lty = 'solid', color = 'grey75') +
+    ggplot2::geom_hline(yintercept = c(-NES.cutoff,NES.cutoff), linewidth = 1, lty = 'dashed', color = 'grey75') +
     ggplot2::scale_colour_manual(name = '',
                                  values = c('sig-Activated' = point.color[1],
                                             'none sig' = point.color[2],
@@ -82,15 +82,20 @@ volcanoGsea <- function(data = NULL,
                    legend.position = 'top') +
     ggplot2::guides(color = ggplot2::guide_legend(override.aes = list(size = 5))) +
     ggplot2::ylab('Normalized enriched score') +
-    ggplot2::xlab(paste("-log10",pcol,sep = ' ')) +
-    ggrepel::geom_text_repel(data = topterm,
-                             ggplot2::aes_string(x = "logp",y = "NES",label = "Description"),
-                             fontface = 'italic',
-                             max.overlaps = 80,
-                             force = 50,
-                             nudge_y = topterm$nudgey,
-                             min.segment.length = ggplot2::unit(0.1, "cm"),
-                             ...)
+    ggplot2::xlab(paste("-log10",pcol,sep = ' '))
+
+  # Only add labels if there are significant terms to label
+  if (nrow(topterm) > 0) {
+    p <- p +
+      ggrepel::geom_text_repel(data = topterm,
+                               ggplot2::aes(x = .data$logp, y = .data$NES, label = .data$Description),
+                               fontface = 'italic',
+                               max.overlaps = 80,
+                               force = 50,
+                               nudge_y = topterm$nudgey,
+                               min.segment.length = ggplot2::unit(0.1, "cm"),
+                               ...)
+  }
 
   return(p)
 }

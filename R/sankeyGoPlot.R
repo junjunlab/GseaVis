@@ -42,11 +42,13 @@ sankeyGoPlot <- function(goData = NULL,
   # ============================================================================
   if(enrich_type == "gsea"){
     ego_df <- goData %>%
+      data.frame() %>%
       dplyr::rename(geneID = core_enrichment) %>%
       dplyr::group_by(Description) %>%
       dplyr::arrange(pvalue)
   }else{
     ego_df <- goData %>%
+      data.frame() %>%
       dplyr::group_by(Description) %>%
       dplyr::mutate(gene_ratio = eval(parse(text = GeneRatio))) %>%
       dplyr::arrange(pvalue)

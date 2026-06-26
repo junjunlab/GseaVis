@@ -79,8 +79,7 @@ GSEAmultiGP <- function(gsea_list = NULL,
   # data process
   # ============================================================================
   if(length(geneSetID) > 1){
-    message("Please give one geneSetID when multi.group set to TRUE!")
-    break
+    stop("Please give one geneSetID when multi.group set to TRUE!")
   }
 
   # process data
@@ -143,11 +142,11 @@ GSEAmultiGP <- function(gsea_list = NULL,
 
   # curve plot
   pcurve <-
-    ggplot2::ggplot(gsdata,ggplot2::aes_(x = ~x, y = ~runningScore)) +
-    ggplot2::geom_line(ggplot2::aes(color = id),linewidth = curve.linewidth) +
+    ggplot2::ggplot(gsdata,ggplot2::aes(x = .data$x, y = .data$runningScore)) +
+    ggplot2::geom_line(ggplot2::aes(color = .data$id), linewidth = curve.linewidth) +
     ggplot2::scale_color_manual(values = line.col,name = "") +
     ggplot2::geom_hline(yintercept = 0,
-                        size = lineSize,
+                        linewidth = lineSize,
                         color = "black",
                         lty = "dashed") +
     ggplot2::theme_bw(base_size = base_size) +
@@ -189,9 +188,9 @@ GSEAmultiGP <- function(gsea_list = NULL,
 
   # segment plot
   pseg <-
-    ggplot2::ggplot(gsdata, ggplot2::aes_(x = ~x, y = ~runningScore,color = ~id)) +
+    ggplot2::ggplot(gsdata, ggplot2::aes(x = .data$x, y = .data$runningScore, color = .data$id)) +
     ggplot2::geom_segment(data = gsdata1,
-                          ggplot2::aes_(x = ~x,xend = ~x,y = 0,yend = 1),
+                          ggplot2::aes(x = .data$x, xend = .data$x, y = 0, yend = 1),
                           show.legend = F) +
     ggplot2::scale_color_manual(values = line.col,name = "") +
     ggplot2::scale_x_continuous(expand = c(0, 0),name = "") +
