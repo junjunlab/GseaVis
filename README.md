@@ -18,6 +18,16 @@ You can install the development version of GseaVis from [GitHub](https://github.
 devtools::install_github("junjunlab/GseaVis")
 ```
 
+### ggplot2 v4 compatibility fix
+
+This fork fixes compatibility with **ggplot2 v4.0+** (e.g. deprecated `aes_()`/`aes_string()` → `aes()`, `size` → `linewidth`). Install the fix branch:
+
+``` r
+devtools::install_github("xpf10/GseaVis@fix/ggplot2-v4-compat")
+```
+
+> **Note:** This fix is under community testing. Once stable, it will be submitted as a PR to the upstream repo.
+
 ## Citation
 
 > Jun Zhang, Hongyuan Li, Wenjun Tao, Jun Zhou. [GseaVis: An R Package for Enhanced Visualization of Gene Set Enrichment Analysis in Biomedicine](https://onlinelibrary.wiley.com/doi/full/10.1002/mdr2.70000). Med Research, 2025.

@@ -3,3 +3,7 @@
 .Rdata
 .httr-oauth
 .DS_Store
+GseaVis.Rcheck/
+*.tar.gz
+test_plots/
+test_all_plots.R

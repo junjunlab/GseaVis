@@ -35,6 +35,7 @@ Imports:
     RColorBrewer,
     readr,
     reshape2,
+    rlang,
     stringr,
     tibble,
     tidyr,

@@ -85,8 +85,8 @@ dotplotGsea <- function(data = NULL,
 
   # plot
   p <-
-    ggplot2::ggplot(df,ggplot2::aes_string(x = order.by,
-                                           y = "Description"))
+    ggplot2::ggplot(df,ggplot2::aes(x = .data[[order.by]],
+                                           y = .data$Description))
 
   # whether add aegment
   if(add.seg == TRUE){
@@ -101,7 +101,7 @@ dotplotGsea <- function(data = NULL,
     p1 <- p +
       ggplot2::geom_segment(aes.seg,
                             color = line.col,
-                            size = line.size,
+                            linewidth = line.size,
                             lty = line.type)
   }else{
     p1 <- p
